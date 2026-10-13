@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="ckb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تۆماری نمرەی مامۆستایان</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #eef2f7; font-family: 'Segoe UI', Tahoma, sans-serif; padding: 20px; direction: rtl; }
+        .container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: 0.3s; }
+        body.course-first .container { border-top: 6px solid #1a3a6a; }
+        body.course-second .container { border-top: 6px solid #1a7a4a; }
+        body.course-first .header h1 { color: #1a3a6a; }
+        body.course-second .header h1 { color: #1a7a4a; }
+        body.course-first .header-subject { background: #1a3a6a; }
+        body.course-second .header-subject { background: #1a7a4a; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e8edf4; padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .header h1 { font-size: 24px; color: #1a2a4a; }
+        .header h1 small { font-size: 14px; color: #5a6e8a; background: #e8edf4; padding: 2px 12px; border-radius: 20px; margin-right: 8px; }
+        .header-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+        .header-meta label { display: flex; align-items: center; gap: 5px; color: #2a4a6a; font-size: 12px; font-weight: 600; }
+        .header-meta input { width: 150px; border: 1px solid #d0dae8; border-radius: 20px; padding: 5px 10px; font-family: inherit; font-size: 12px; outline: none; }
+        .header-meta input:focus { border-color: #1a3a6a; }
+        .header-badges { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+        .header-badge { background: #e8edf4; padding: 6px 18px; border-radius: 30px; font-weight: 600; color: #1a3a6a; white-space: nowrap; }
+        .header-subject { color: white; padding: 6px 18px; border-radius: 30px; font-weight: 700; white-space: nowrap; font-size: 14px; transition: 0.3s; }
+        .nav-pages { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; background: #f5f8fc; padding: 12px 18px; border-radius: 16px; border: 1px solid #dde4ed; align-items: center; }
+        .nav-pages .label { font-weight: 600; color: #2a4a6a; font-size: 14px; }
+        .nav-pages .page-btn { background: white; border: 2px solid #d0dae8; padding: 5px 16px; border-radius: 30px; font-weight: 600; color: #2a4a6a; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .nav-pages .page-btn:hover { background: #e8edf4; }
+        .nav-pages .page-btn.active { background: #1a3a6a; border-color: #1a3a6a; color: white; }
+        .nav-pages .page-btn .sub { font-size: 10px; display: block; color: #7a8aa0; }
+        .nav-pages .page-btn.active .sub { color: #aac0e0; }
+        .nav-pages .spacer { flex: 1; }
+        .nav-pages .action-btn { padding: 6px 18px; border-radius: 30px; font-weight: 700; cursor: pointer; border: 2px solid; font-size: 13px; font-family: inherit; }
+        .nav-pages .lock-btn { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+        .nav-pages .lock-btn.locked { background: #b13e3e; border-color: #b13e3e; }
+        .nav-pages .schedule-btn { background: #1a3a6a; border-color: #1a3a6a; color: white; }
+        .nav-pages .schedule-btn:hover { background: #0e2a4a; }
+        .nav-pages .hoba-edit-btn { background: #6a4a7a; border-color: #6a4a7a; color: white; }
+        .nav-pages .copy-btn { background: #1a7a7a; border-color: #1a7a7a; color: white; }
+        .nav-pages .pwd-btn { background: #8a5a00; border-color: #8a5a00; color: white; }
+        .nav-pages .rank-btn { background: #c47a00; border-color: #c47a00; color: white; }
+        .nav-pages .pdf-btn { background: #8a1a4a; border-color: #8a1a4a; color: white; }
+        .nav-pages .autobackup-btn { background: #0e6a8a; border-color: #0e6a8a; color: white; }
+        .nav-pages .history-btn { background: #4a2a6a; border-color: #4a2a6a; color: white; }
+        .nav-pages .annual-btn { background: #0e4a8a; border-color: #0e4a8a; color: white; }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; background: #f5f8fc; padding: 12px 18px; border-radius: 16px; border: 1px solid #dde4ed; align-items: center; }
+        .toolbar-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .toolbar-group label { font-weight: 500; color: #2a4a6a; font-size: 13px; }
+        .toolbar-group input { background: white; border: 1px solid #d0dae8; border-radius: 30px; padding: 4px 12px; font-size: 13px; width: 70px; outline: none; }
+        .toolbar-group input:focus { border-color: #1a3a6a; }
+        .search-input { width: 200px !important; }
+        .filter-select { background: white; border: 1px solid #d0dae8; border-radius: 30px; padding: 5px 12px; font-size: 13px; outline: none; font-family: inherit; cursor: pointer; }
+        .btn { background: white; border: 1px solid #d0dae8; padding: 5px 16px; border-radius: 30px; font-weight: 600; color: #2a4a6a; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .btn:hover { background: #e8edf4; }
+        .btn-primary { background: #1a3a6a; border-color: #1a3a6a; color: white; }
+        .btn-success { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+        .btn-excel { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+        .btn-excel:hover { background: #0e5a3a; }
+        .btn-outline { background: transparent; }
+        .spacer { flex: 1; }
+        .count-display { background: #e8edf4; padding: 2px 14px; border-radius: 30px; font-weight: 600; color: #1a3a6a; font-size: 14px; }
+        .course-selector { display: flex; gap: 5px; background: #e8edf4; padding: 4px; border-radius: 30px; }
+        .course-selector .course-btn { padding: 4px 16px; border: none; border-radius: 30px; background: transparent; font-weight: 600; cursor: pointer; font-size: 13px; color: #2a4a6a; transition: 0.2s; }
+        .course-selector .course-btn[data-course="first"].active { background: #1a3a6a; color: white; }
+        .course-selector .course-btn[data-course="second"].active { background: #1a7a4a; color: white; }
+        .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #dde4ed; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1000px; }
+        thead { background: #e8edf4; border-bottom: 2px solid #d0dae8; }
+        thead th { padding: 10px 4px; text-align: center; font-weight: 700; color: #1a2a4a; font-size: 11px; border-left: 1px solid #dde4ed; white-space: nowrap; }
+        thead th:last-child { border-left: none; }
+        thead th .sub { font-weight: 400; font-size: 10px; color: #5a7a9a; display: block; }
+        thead th.group-header { background: #d5e0ee; }
+        thead th.total-header { background: #c8d8ec; }
+        thead th.main-total { background: #b8cce2; }
+        thead th.final-col { background: #d8c8e0; }
+        thead th.mark-20-header { background: #ffe0b2; color: #8a5000; }
+        thead th.mark-60-header { background: #ffe0b2; color: #8a5000; }
+        thead th.note-header { background: #ffe8cc; color: #6a4500; }
+        thead th.eval-header { background: #e8f5e8; color: #1a5a3a; }
+        tbody tr { border-bottom: 1px solid #e8edf4; }
+        tbody tr:hover { background: #f5f8fc; }
+        tbody td { padding: 4px 2px; text-align: center; border-left: 1px solid #e8edf4; }
+        tbody td input { width: 100%; padding: 4px 2px; border: 1px solid transparent; border-radius: 4px; font-size: 13px; text-align: center; background: transparent; outline: none; font-family: inherit; }
+        tbody td input:hover { background: #f0f6ff; border-color: #d0dae8; }
+        tbody td input:focus { background: white; border-color: #1a3a6a; }
+        tbody td input.number-input { min-width: 40px; width: 50px; }
+        tbody td input:disabled { background: #f0f0f0; color: #555; cursor: not-allowed; }
+        tbody td.mark-20-cell { background: #fff3e0; }
+        tbody td.mark-60-cell { background: #fff3e0; }
+        tbody td.mark-20-cell input { background: #fff8f0; }
+        tbody td.mark-60-cell input { background: #fff8f0; }
+        tbody td.note-cell { background: #fff8ee; }
+        tbody td.note-cell input { text-align: right; padding: 4px 8px; font-size: 12px; }
+        tbody td.eval-cell { background: #f0f8f0; }
+        .score-pair { display: flex; gap: 1px; align-items: center; justify-content: center; }
+        .score-pair input { width: 16px !important; min-width: 16px !important; padding: 3px 0 !important; font-size: 11px !important; }
+        .score-pair .separator { color: #c0c8d8; font-weight: bold; font-size: 9px; }
+        .row-num { font-weight: 600; color: #1a3a6a; font-size: 12px; cursor: pointer; }
+        .row-num:hover { text-decoration: underline; }
+        .name-clickable { cursor: pointer; }
+        .name-clickable:hover { background: #e8f0ff !important; }
+        .total-display { font-weight: 700; font-size: 13px; padding: 2px 6px; border-radius: 4px; background: #f0f6ff; }
+        .total-display.highlight { color: #1a6a3a; background: #e6f5ed; }
+        .total-display.main { color: #8b1a1a; background: #fde8e8; }
+        .total-display.final { color: #6a1a8b; background: #f0e8fd; }
+        .eval-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+        .eval-excellent { background: #d4f5dd; color: #1a5a3a; }
+        .eval-verygood { background: #d4e8f5; color: #1a3a5a; }
+        .eval-good { background: #f5f0d4; color: #6a5a1a; }
+        .eval-acceptable { background: #f5e0d4; color: #7a4a1a; }
+        .eval-weak { background: #f5d4d4; color: #7a1a1a; }
+        .row-actions { display: flex; gap: 2px; justify-content: center; }
+        .btn-icon { background: transparent; border: none; cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 20px; transition: 0.2s; color: #4a6a8a; }
+        .btn-icon:hover { background: #e8edf4; }
+        .btn-icon.danger:hover { background: #fde8e8; color: #b13e3e; }
+        .btn-icon.success:hover { background: #e6f5ed; color: #1a7a4a; }
+        .summary-bar { margin-top: 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 12px 20px; background: #f5f8fc; border-radius: 16px; border: 1px solid #dde4ed; color: #1a3a6a; font-weight: 500; font-size: 14px; gap: 8px; }
+        .summary-bar span { background: #e8edf4; padding: 2px 14px; border-radius: 30px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; padding: 30px; overflow-y: auto; }
+        .modal-overlay.active { display: flex; justify-content: center; align-items: flex-start; }
+        .modal-content { background: white; border-radius: 16px; padding: 25px; max-width: 1400px; width: 100%; margin: auto; position: relative; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e8edf4; padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .modal-header h2 { font-size: 22px; color: #1a2a4a; }
+        .modal-header .close-btn { background: #b13e3e; border: none; color: white; padding: 6px 20px; border-radius: 30px; font-weight: 700; font-size: 14px; cursor: pointer; }
+        .modal-body { overflow-x: auto; }
+        .rank-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .rank-table thead { background: #e8edf4; }
+        .rank-table th { padding: 12px 10px; text-align: center; color: #1a2a4a; font-weight: 700; font-size: 13px; border-bottom: 2px solid #d0dae8; }
+        .rank-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e8edf4; }
+        .rank-table tr:hover { background: #f5f8fc; }
+        .rank-medal { font-size: 22px; }
+        .rank-1 { background: linear-gradient(90deg, #fff8e0, #ffffff) !important; }
+        .rank-2 { background: linear-gradient(90deg, #f0f0f0, #ffffff) !important; }
+        .rank-3 { background: linear-gradient(90deg, #ffe8d0, #ffffff) !important; }
+        .rank-score { font-weight: 700; color: #1a3a6a; font-size: 15px; }
+        .rank-bar { height: 8px; background: #e8edf4; border-radius: 4px; overflow: hidden; max-width: 150px; margin: 0 auto; }
+        .rank-bar-fill { height: 100%; background: linear-gradient(90deg, #1a7a4a, #1a3a6a); border-radius: 4px; transition: width 0.5s; }
+        .report-header { text-align: center; padding: 15px 0; border-bottom: 3px double #1a3a6a; margin-bottom: 20px; }
+        .report-header h2 { color: #1a3a6a; font-size: 24px; margin-bottom: 8px; }
+        .report-header p { color: #5a6e8a; font-size: 14px; margin: 3px 0; }
+        .report-info { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 20px; padding: 12px 18px; background: #f5f8fc; border-radius: 12px; }
+        .report-info div { font-size: 13px; color: #2a4a6a; }
+        .report-info div strong { color: #1a3a6a; }
+        .report-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .report-stat { text-align: center; padding: 15px; border-radius: 12px; }
+        .report-stat.a { background: #e6f5ed; }
+        .report-stat.b { background: #e8e8fd; }
+        .report-stat.c { background: #fff3e0; }
+        .report-stat.d { background: #fde8e8; }
+        .report-stat .num { font-size: 26px; font-weight: 700; margin-bottom: 5px; }
+        .report-stat.a .num { color: #1a6a3a; }
+        .report-stat.b .num { color: #1a3a8b; }
+        .report-stat.c .num { color: #8a5000; }
+        .report-stat.d .num { color: #8b1a1a; }
+        .report-stat .lbl { font-size: 12px; color: #5a6e8a; font-weight: 600; }
+        .report-actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .report-actions button { padding: 10px 25px; border: none; border-radius: 30px; font-weight: 700; font-size: 14px; cursor: pointer; }
+        .report-actions .print-report { background: #1a3a6a; color: white; }
+        .report-actions .close-report { background: #b13e3e; color: white; }
+        .charts-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .chart-card { background: #f9fbff; padding: 15px; border-radius: 12px; border: 1px solid #dde4ed; }
+        .chart-card h3 { font-size: 14px; color: #1a3a6a; margin-bottom: 10px; text-align: center; }
+        .chart-container { position: relative; height: 250px; display: flex; align-items: center; justify-content: center; }
+        .history-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .history-table th { background: #e8edf4; padding: 10px; color: #1a2a4a; font-weight: 700; font-size: 12px; text-align: center; }
+        .history-table td { padding: 8px 10px; border-bottom: 1px solid #e8edf4; text-align: center; font-size: 12px; }
+        .history-table tr:hover { background: #f5f8fc; }
+        .history-time { color: #5a6e8a; font-size: 11px; white-space: nowrap; }
+        .history-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+        .badge-add { background: #d4f5dd; color: #1a5a3a; }
+        .badge-del { background: #f5d4d4; color: #7a1a1a; }
+        .badge-edit { background: #d4e8f5; color: #1a3a5a; }
+        .badge-lock { background: #f5e8d4; color: #7a5a1a; }
+        .badge-system { background: #e0d4f5; color: #3a1a5a; }
+        .profile-header { display: flex; align-items: center; gap: 20px; padding: 20px; background: linear-gradient(135deg, #1a3a6a, #2a4a7a); border-radius: 12px; color: white; margin-bottom: 20px; }
+        .profile-avatar { width: 70px; height: 70px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700; flex-shrink: 0; }
+        .profile-info h3 { font-size: 22px; margin-bottom: 5px; }
+        .profile-info p { font-size: 13px; opacity: 0.9; }
+        .profile-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .profile-stat { background: #f5f8fc; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #dde4ed; }
+        .profile-stat .num { font-size: 24px; font-weight: 700; color: #1a3a6a; }
+        .profile-stat .lbl { font-size: 12px; color: #5a6e8a; font-weight: 600; margin-top: 4px; }
+        .profile-section { margin-bottom: 20px; }
+        .profile-section h4 { color: #1a3a6a; font-size: 16px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e8edf4; }
+        .profile-courses { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .profile-course { padding: 15px; border-radius: 12px; background: #f9fbff; border: 1px solid #dde4ed; }
+        .profile-course h5 { color: #1a3a6a; font-size: 14px; margin-bottom: 10px; }
+        .profile-course.course2 { background: #f5fbf7; border-color: #c5e5d5; }
+        .profile-course.course2 h5 { color: #1a7a4a; }
+        .profile-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e8edf4; font-size: 13px; }
+        .profile-row:last-child { border-bottom: none; }
+        .profile-row .lbl { color: #5a6e8a; }
+        .profile-row .val { font-weight: 700; color: #1a3a6a; }
+        .note-display { background: #fff8ee; padding: 12px 15px; border-radius: 12px; border-right: 4px solid #c47a00; font-size: 13px; color: #5a4500; min-height: 50px; }
+        .annual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .annual-card { background: #f9fbff; border-radius: 12px; padding: 15px; border: 1px solid #dde4ed; }
+        .annual-card h4 { color: #1a3a6a; font-size: 15px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #e8edf4; }
+        .annual-card .stat-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+        .annual-card .stat-row .lbl { color: #5a6e8a; }
+        .annual-card .stat-row .val { font-weight: 700; color: #1a3a6a; }
+        .annual-summary { background: linear-gradient(135deg, #1a3a6a, #2a4a7a); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        .annual-summary h3 { font-size: 18px; margin-bottom: 15px; }
+        .annual-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        .annual-summary-grid .item { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px; text-align: center; }
+        .annual-summary-grid .item .num { font-size: 24px; font-weight: 700; }
+        .annual-summary-grid .item .lbl { font-size: 11px; opacity: 0.9; margin-top: 4px; }
+        @media print {
+            @page { margin: 10mm; size: A4 landscape; }
+            body { background: white !important; padding: 0 !important; font-size: 11px !important; }
+            .nav-pages, .toolbar, .summary-bar, .row-actions, .btn, .action-btn, .modal-header .close-btn, .report-actions { display: none !important; }
+            .modal-overlay.active { display: block !important; background: white !important; position: static !important; padding: 0 !important; }
+            .modal-overlay.active .modal-content { max-width: none !important; max-height: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; }
+            table { min-width: 0 !important; font-size: 9px !important; }
+            thead th { padding: 4px 1px !important; font-size: 8px !important; border: 1px solid #333 !important; }
+            tbody td { padding: 3px 1px !important; border: 1px solid #999 !important; font-size: 9px !important; }
+            .note-cell, .eval-cell { display: none !important; }
+        }
+        @media (max-width: 900px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            .header { flex-direction: column; align-items: start; }
+            .header-badges { align-items: flex-start; width: 100%; }
+            .nav-pages, .toolbar { flex-direction: column; align-items: stretch; border-radius: 16px; padding: 12px; gap: 8px; }
+            .nav-pages .spacer, .toolbar .spacer { display: none; }
+            .nav-pages .label { margin-bottom: 4px; }
+            .nav-pages .action-btn { width: 100%; text-align: center; }
+            .course-selector { width: 100%; justify-content: center; }
+            .toolbar-group { justify-content: center; width: 100%; }
+            .toolbar-group input { flex: 1; }
+            .search-input { width: 100% !important; }
+            .charts-wrap { grid-template-columns: 1fr; }
+            .profile-courses { grid-template-columns: 1fr; }
+            table { font-size: 11px; min-width: 900px; }
+            .report-stats { grid-template-columns: repeat(2, 1fr); }
+            .summary-bar { flex-direction: column; align-items: stretch; text-align: center; border-radius: 16px; }
+        }
+        @media (max-width: 500px) {
+            .container { padding: 12px; }
+            .header h1 { font-size: 16px; }
+            .header h1 small { font-size: 11px; }
+            .nav-pages .page-btn { font-size: 11px; padding: 4px 10px; }
+            .btn { font-size: 11px; padding: 4px 12px; }
+            .report-stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="course-first">
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>📋 تۆماری نمرەی مامۆستایان <small>پۆلی <span id="gradeDisplay">٧</span></small></h1>
+            <div class="header-meta">
+                <label>🏫 ناوی قوتابخانە:
+                    <input type="text" id="schoolNameInput" value="باسرمەی نوێی بنەرەتی تێکەڵاو" placeholder="ناوی قوتابخانە">
+                </label>
+                <label>📅 ساڵی خوێندنی:
+                    <input type="text" id="academicYearInput" value="٢٠٢٦–٢٠٢٧" placeholder="ساڵی خوێندنی">
+                </label>
+            </div>
+        </div>
+        <div class="header-badges">
+            <div class="header-badge">👨‍🏫 مامۆستا: أنور أنور مصطفى</div>
+            <div class="header-subject">📖 وانەی زمانی ئینگلیزی</div>
+        </div>
+    </div>
+
+    <div class="nav-pages" id="navPages">
+        <span class="label">📚 پۆل:</span>
+        <div id="hobaButtonsContainer" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+        <span class="spacer"></span>
+        <div class="course-selector">
+            <button class="course-btn active" data-course="first">📘 کۆرسی یەکەم</button>
+            <button class="course-btn" data-course="second">📗 کۆرسی دووەم</button>
+        </div>
+        <button class="action-btn copy-btn" id="copyNamesBtn">📋 کۆپی ناوەکان</button>
+        <button class="action-btn rank-btn" id="rankBtn">🏆 ڕیزبەندی</button>
+        <button class="action-btn pdf-btn" id="reportBtn">📄 ڕاپۆرت</button>
+        <button class="action-btn annual-btn" id="annualReportBtn">📚 ڕاپۆرتی ساڵانە</button>
+        <button class="action-btn history-btn" id="historyBtn">📜 مێژوو</button>
+        <button class="action-btn autobackup-btn" id="autoBackupBtn">💾 Auto-Backup</button>
+        <button class="action-btn lock-btn" id="lockBtn">🔓 نمرەکان کراوەن</button>
+        <button class="action-btn schedule-btn" id="scheduleBtn">📊 خشتە</button>
+        <button class="action-btn hoba-edit-btn" id="hobaEditBtn">✏️ بەڕێوەبردنی هۆبە</button>
+        <button class="action-btn pwd-btn" id="pwdBtn">🔑 وشەی نهێنی</button>
+    </div>
+
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <label>ژمارە:</label>
+            <input type="number" id="rowCountInput" value="0" min="0" max="100" style="width:70px;">
+            <button class="btn btn-primary" id="addRowsBtn">➕ زیادکردن</button>
+        </div>
+        <div class="toolbar-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 گەڕان بە ناوی قوتابی...">
+            <select id="filterSelect" class="filter-select">
+                <option value="all">هەموو</option>
+                <option value="excellent">زۆر باش (٩٠+)</option>
+                <option value="passed">دەرچوو (٥٠+)</option>
+                <option value="failed">دەرنەچوو (&lt;٥٠)</option>
+            </select>
+        </div>
+        <div class="toolbar-group">
+            <span class="count-display">👥 <span id="currentStudentCount">٠</span></span>
+        </div>
+        <span class="spacer"></span>
+        <div class="toolbar-group">
+            <button class="btn btn-excel" id="exportExcelBtn">📊 Excel/CSV</button>
+            <button class="btn btn-success" id="saveBtn">💾 پاشەکەوت</button>
+            <button class="btn" id="backupBtn">📥 Backup</button>
+            <button class="btn" id="importBtn">📤 هێنانەوە</button>
+            <input type="file" id="importFileInput" accept="*/*" style="position:absolute; left:-9999px;">
+            <button class="btn" id="printBtn">🖨️ چاپ</button>
+            <button class="btn btn-outline" id="resetBtn">🔄 نوێکردنەوە</button>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:30px;">#</th>
+                    <th style="min-width:80px;">ناوی قوتابی</th>
+                    <th colspan="5" class="group-header">نمرە (٢)<br><span class="sub">پێنج نمرە</span></th>
+                    <th class="total-header">کۆی ١<br><span class="sub">(١٠)</span></th>
+                    <th class="total-header mark-20-header">نمرە (٢٠)</th>
+                    <th colspan="5" class="group-header">نمرە (٢)<br><span class="sub">پێنج نمرە</span></th>
+                    <th class="total-header">کۆی ٢<br><span class="sub">(١٠)</span></th>
+                    <th class="total-header mark-60-header">نمرە (٦٠)</th>
+                    <th class="total-header main-total">کۆی گشتی<br><span class="sub">(١٠٠)</span></th>
+                    <th class="total-header final-col" id="finalScoreHeader" style="display:none;">نمرەی کۆتایی<br><span class="sub">(٢٠٠)</span></th>
+                    <th class="note-header" style="min-width:100px;">📝 تێبینی</th>
+                    <th class="eval-header" style="width:80px;">🎯 ئاست</th>
+                    <th style="width:55px;">کردار</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="summary-bar">
+        <div>👥 کۆی قوتابی: <span id="totalCount">٠</span></div>
+        <div>📈 تێکڕا: <span id="avgScore">—</span></div>
+        <div>📅 <span id="dateDisplay"></span></div>
+        <div>🔒 <span id="lockStatusDisplay">کراوە</span></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="scheduleModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📊 خشتەی تەواوی نمرەکان - <span id="modalTitle">پۆلی ٧ ھۆبەی أ</span></h2>
+            <button class="close-btn" id="closeModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:30px;">#</th>
+                            <th style="min-width:80px;">ناوی قوتابی</th>
+                            <th colspan="5" class="group-header">نمرە (٢)</th>
+                            <th class="total-header">کۆی ١<br><span class="sub">(١٠)</span></th>
+                            <th class="total-header mark-20-header">نمرە (٢٠)</th>
+                            <th colspan="5" class="group-header">نمرە (٢)</th>
+                            <th class="total-header">کۆی ٢<br><span class="sub">(١٠)</span></th>
+                            <th class="total-header mark-60-header">نمرە (٦٠)</th>
+                            <th class="total-header main-total">کۆی گشتی<br><span class="sub">(١٠٠)</span></th>
+                            <th class="total-header final-col" id="modalFinalHeader" style="display:none;">کۆتایی<br><span class="sub">(٢٠٠)</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="rankModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>🏆 ڕیزبەندی - <span id="rankModalTitle">پۆلی ٧</span></h2>
+            <button class="close-btn" id="closeRankModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div style="text-align:center; margin-bottom:15px;">
+                <button class="btn btn-primary" id="rankFirstCourseBtn" style="margin:3px;">📘 کۆرسی یەکەم</button>
+                <button class="btn" id="rankSecondCourseBtn" style="margin:3px;">📗 کۆرسی دووەم</button>
+                <button class="btn btn-success" id="rankFinalBtn" style="margin:3px;">🏆 نمرەی کۆتایی</button>
+            </div>
+            <div id="rankTableContainer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="reportModal">
+    <div class="modal-content report-modal">
+        <div class="modal-header">
+            <h2>📄 ڕاپۆرتی نمرەکان</h2>
+            <button class="close-btn" id="closeReportModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div class="report-header">
+                <h2 id="reportSchoolName">باسرمەی نوێی بنەرەتی تێکەڵاو</h2>
+                <p>📖 وانەی زمانی ئینگلیزی</p>
+                <p>📅 ساڵی خوێندنی: <span id="reportYear">٢٠٢٦–٢٠٢٧</span></p>
+                <p style="margin-top:8px; font-weight:700; color:#1a3a6a;"><span id="reportClassInfo">پۆلی ٧ ھۆبەی أ</span></p>
+                <p style="font-size:12px;">📅 بەروار: <span id="reportDate"></span></p>
+            </div>
+            <div class="report-info">
+                <div>👨‍🏫 مامۆستا: <strong>أنور أنور مصطفى</strong></div>
+                <div>👥 کۆی قوتابی: <strong id="reportTotalStudents">٠</strong></div>
+                <div>📊 کۆی نمرەکان: <strong id="reportTotalScores">٠</strong></div>
+            </div>
+            <div class="report-stats">
+                <div class="report-stat a"><div class="num" id="reportHighest">—</div><div class="lbl">🏆 بەرزترین</div></div>
+                <div class="report-stat b"><div class="num" id="reportAverage">—</div><div class="lbl">📈 تێکڕا</div></div>
+                <div class="report-stat c"><div class="num" id="reportLowest">—</div><div class="lbl">📉 کەمترین</div></div>
+                <div class="report-stat d"><div class="num" id="reportPassed">—</div><div class="lbl">✅ دەرچوو (٥٠+)</div></div>
+            </div>
+            <div class="charts-wrap">
+                <div class="chart-card">
+                    <h3>📊 دابەشکردنی ئاست</h3>
+                    <div class="chart-container"><canvas id="gradeChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>🥧 دەرچوو / دەرنەچوو</h3>
+                    <div class="chart-container"><canvas id="passChart"></canvas></div>
+                </div>
+            </div>
+            <div id="reportRankingContainer"></div>
+            <div class="report-actions">
+                <button class="print-report" id="printReportBtn">🖨️ چاپکردن / PDF</button>
+                <button class="close-report" id="closeReportBtn">داخستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-content" style="max-width:800px;">
+        <div class="modal-header">
+            <h2>👤 پڕۆفایلی قوتابی</h2>
+            <button class="close-btn" id="closeProfileModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body" id="profileBody"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="historyModal">
+    <div class="modal-content" style="max-width:1000px;">
+        <div class="modal-header">
+            <h2>📜 مێژووی گۆڕانکارییەکان</h2>
+            <button class="close-btn" id="closeHistoryModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom:12px; display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn btn-outline" id="clearHistoryBtn" style="color:#b13e3e; border-color:#b13e3e;">🗑️ پاککردنەوەی مێژوو</button>
+            </div>
+            <div id="historyContainer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="annualReportModal">
+    <div class="modal-content" style="max-width:1200px;">
+        <div class="modal-header">
+            <h2>📚 ڕاپۆرتی ساڵانە - هەموو پۆلەکان</h2>
+            <button class="close-btn" id="closeAnnualModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div style="text-align:center; margin-bottom:15px;">
+                <button class="btn btn-primary" id="annualCourse1Btn" style="margin:3px;">📘 کۆرسی یەکەم</button>
+                <button class="btn" id="annualCourse2Btn" style="margin:3px;">📗 کۆرسی دووەم</button>
+                <button class="btn btn-success" id="annualCourseFinalBtn" style="margin:3px;">🏆 نمرەی کۆتایی</button>
+            </div>
+            <div id="annualReportBody"></div>
+            <div class="report-actions" style="margin-top:20px;">
+                <button class="print-report" id="printAnnualBtn" style="background:#1a3a6a; color:white;">🖨️ چاپکردن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="autoBackupModal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h2>💾 Auto-Backup</h2>
+            <button class="close-btn" id="closeAutoBackupModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div style="padding: 10px 0; color: #2a4a6a;">
+                <div style="background: #f5f8fc; padding: 12px 15px; border-radius: 12px; margin-bottom: 12px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600;">
+                        <input type="checkbox" id="autoBackupEnabled" style="width: 18px; height: 18px;">
+                        <span>چالاککردنی Auto-Backup</span>
+                    </label>
+                </div>
+                <div style="background: #f5f8fc; padding: 12px 15px; border-radius: 12px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px;">⏰ هەر چەند ڕۆژ جارێک؟</label>
+                    <select id="backupInterval" style="width: 100%; padding: 8px 12px; border: 1px solid #d0dae8; border-radius: 20px; font-family: inherit;">
+                        <option value="1">هەر ١ ڕۆژ</option>
+                        <option value="3" selected>هەر ٣ ڕۆژ</option>
+                        <option value="7">هەر ٧ ڕۆژ</option>
+                        <option value="14">هەر ٢ هەفتە</option>
+                        <option value="30">هەر مانگێک</option>
+                    </select>
+                </div>
+                <div style="background: #fff8e0; padding: 12px 15px; border-radius: 12px; border-right: 4px solid #c47a00; margin-top:12px; font-size:12px; color:#6a4500;">
+                    ℹ️ فایلەکانی backup خۆکار دادەبەزێنرێن بۆ فۆڵدەری Downloads.
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
+                <button id="saveAutoBackupBtn" style="padding: 8px 22px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; background: #1a7a4a; color: white;">💾 پاشەکەوت</button>
+                <button id="closeAutoBackupBtn" style="padding: 8px 22px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; background: #b13e3e; color: white;">داخستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="hobaModal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h2>✏️ بەڕێوەبردنی هۆبەکان</h2>
+            <button class="close-btn" id="closeHobaModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div id="hobaList"></div>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <input type="text" id="newHobaName" placeholder="ناوی هۆبەی نوێ... (وەک: 7D)" style="flex:1; border: 1px solid #d0dae8; border-radius: 20px; padding: 5px 12px;">
+                <button id="addHobaBtn" style="background: #1a7a4a; color: white; border: none; padding: 5px 18px; border-radius: 20px; cursor: pointer; font-weight: 700;">➕ زیادکردن</button>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end;">
+                <button id="saveHobaBtn" style="padding: 6px 20px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; background: #1a3a6a; color: white;">💾 پاشەکەوت</button>
+                <button id="closeHobaBtn" style="padding: 6px 20px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; background: #b13e3e; color: white;">داخستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="pwdModal">
+    <div class="modal-content" style="max-width: 420px;">
+        <div class="modal-header">
+            <h2>🔑 گۆڕینی وشەی نهێنی</h2>
+            <button class="close-btn" id="closePwdModalBtn">✕ داخستن</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; color:#2a4a6a; font-weight:600; font-size:13px; margin-bottom:5px;">وشەی نهێنی ئێستا:</label>
+                <input type="password" id="oldPwdInput" style="width:100%; border:1px solid #d0dae8; border-radius:20px; padding:8px 14px;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; color:#2a4a6a; font-weight:600; font-size:13px; margin-bottom:5px;">وشەی نهێنی نوێ:</label>
+                <input type="password" id="newPwdInput" style="width:100%; border:1px solid #d0dae8; border-radius:20px; padding:8px 14px;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; color:#2a4a6a; font-weight:600; font-size:13px; margin-bottom:5px;">دووبارە وشەی نهێنی نوێ:</label>
+                <input type="password" id="confirmPwdInput" style="width:100%; border:1px solid #d0dae8; border-radius:20px; padding:8px 14px;">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
+                <button id="savePwdBtn" style="padding: 6px 20px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; background: #1a7a4a; color: white;">💾 پاشەکەوت</button>
+                <button id="closePwdBtn" style="padding: 6px 20px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; background: #b13e3e; color: white;">داخستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    let allData = {};
+    let hobaList = ['7A', '7B', '7C', '8A', '8B', '9A'];
+    let currentPage = '7A';
+    let currentCourse = 'first';
+    let isLocked = false;
+    let rankCourse = 'first';
+    let annualCourse = 'first';
+    let searchQuery = '';
+    let filterType = 'all';
+    const SCORE_COLS = 5;
+
+    let settings = {
+        schoolName: 'باسرمەی نوێی بنەرەتی تێکەڵاو',
+        academicYear: '٢٠٢٦–٢٠٢٧',
+        hobaList: ['7A', '7B', '7C', '8A', '8B', '9A'],
+        password: '9991',
+        autoBackup: { enabled: false, interval: 3, lastBackup: null },
+        history: []
+    };
+
+    const safeStorage = {
+        getItem(k) { try { return window.localStorage ? window.localStorage.getItem(k) : null; } catch(e) { return null; } },
+        setItem(k, v) { try { if (window.localStorage) window.localStorage.setItem(k, v); } catch(e) {} }
+    };
+
+    function kurdishToEnglishNumbers(str) {
+        if (str === null || str === undefined) return '';
+        const kd = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+        const ed = ['0','1','2','3','4','5','6','7','8','9'];
+        let r = String(str);
+        for (let i = 0; i < kd.length; i++) r = r.split(kd[i]).join(ed[i]);
+        return r;
+    }
+    function englishToKurdishNumbers(str) {
+        if (str === null || str === undefined) return '';
+        const ed = ['0','1','2','3','4','5','6','7','8','9'];
+        const kd = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+        let r = String(str);
+        for (let i = 0; i < ed.length; i++) r = r.split(ed[i]).join(kd[i]);
+        return r;
+    }
+    function emptyScores() { return Array(SCORE_COLS * 2).fill(''); }
+    function createEmptyStudent() { return { name: '', scores: emptyScores(), scores2: emptyScores(), extraScores: ['', '', '', ''], note: '' }; }
+    function normalizeStudent(s) {
+        const st = s || {};
+        let scores = Array.isArray(st.scores) ? st.scores.slice(0, SCORE_COLS * 2) : [];
+        while (scores.length < SCORE_COLS * 2) scores.push('');
+        let scores2 = Array.isArray(st.scores2) ? st.scores2.slice(0, SCORE_COLS * 2) : [];
+        while (scores2.length < SCORE_COLS * 2) scores2.push('');
+        return {
+            name: st.name || '',
+            scores: scores,
+            scores2: scores2,
+            extraScores: Array.isArray(st.extraScores) ? st.extraScores.slice(0, 4) : ['', '', '', ''],
+            note: st.note || ''
+        };
+    }
+
+    const $ = id => document.getElementById(id);
+    const tbody = $('tableBody');
+    const modalTbody = $('modalTableBody');
+    const rowCountInput = $('rowCountInput');
+    const addRowsBtn = $('addRowsBtn');
+    const saveBtn = $('saveBtn');
+    const backupBtn = $('backupBtn');
+    const importBtn = $('importBtn');
+    const importFileInput = $('importFileInput');
+    const printBtn = $('printBtn');
+    const resetBtn = $('resetBtn');
+    const lockBtn = $('lockBtn');
+    const scheduleBtn = $('scheduleBtn');
+    const closeModalBtn = $('closeModalBtn');
+    const scheduleModal = $('scheduleModal');
+    const modalTitle = $('modalTitle');
+    const totalSpan = $('totalCount');
+    const avgSpan = $('avgScore');
+    const dateDisplay = $('dateDisplay');
+    const lockStatusDisplay = $('lockStatusDisplay');
+    const gradeDisplay = $('gradeDisplay');
+    const currentStudentCount = $('currentStudentCount');
+    const schoolNameInput = $('schoolNameInput');
+    const academicYearInput = $('academicYearInput');
+    const hobaButtonsContainer = $('hobaButtonsContainer');
+    const hobaModal = $('hobaModal');
+    const hobaListEl = $('hobaList');
+    const newHobaName = $('newHobaName');
+    const addHobaBtn = $('addHobaBtn');
+    const saveHobaBtn = $('saveHobaBtn');
+    const closeHobaBtn = $('closeHobaBtn');
+    const closeHobaModalBtn = $('closeHobaModalBtn');
+    const hobaEditBtn = $('hobaEditBtn');
+    const courseBtns = document.querySelectorAll('.course-btn');
+    const finalScoreHeader = $('finalScoreHeader');
+    const modalFinalHeader = $('modalFinalHeader');
+    const copyNamesBtn = $('copyNamesBtn');
+    const pwdBtn = $('pwdBtn');
+    const pwdModal = $('pwdModal');
+    const oldPwdInput = $('oldPwdInput');
+    const newPwdInput = $('newPwdInput');
+    const confirmPwdInput = $('confirmPwdInput');
+    const savePwdBtn = $('savePwdBtn');
+    const closePwdBtn = $('closePwdBtn');
+    const closePwdModalBtn = $('closePwdModalBtn');
+    const rankBtn = $('rankBtn');
+    const rankModal = $('rankModal');
+    const closeRankModalBtn = $('closeRankModalBtn');
+    const rankModalTitle = $('rankModalTitle');
+    const rankFirstCourseBtn = $('rankFirstCourseBtn');
+    const rankSecondCourseBtn = $('rankSecondCourseBtn');
+    const rankFinalBtn = $('rankFinalBtn');
+    const rankTableContainer = $('rankTableContainer');
+    const reportBtn = $('reportBtn');
+    const reportModal = $('reportModal');
+    const closeReportModalBtn = $('closeReportModalBtn');
+    const closeReportBtn = $('closeReportBtn');
+    const printReportBtn = $('printReportBtn');
+    const reportSchoolName = $('reportSchoolName');
+    const reportYear = $('reportYear');
+    const reportClassInfo = $('reportClassInfo');
+    const reportDate = $('reportDate');
+    const reportTotalStudents = $('reportTotalStudents');
+    const reportTotalScores = $('reportTotalScores');
+    const reportHighest = $('reportHighest');
+    const reportAverage = $('reportAverage');
+    const reportLowest = $('reportLowest');
+    const reportPassed = $('reportPassed');
+    const reportRankingContainer = $('reportRankingContainer');
+    const autoBackupBtn = $('autoBackupBtn');
+    const autoBackupModal = $('autoBackupModal');
+    const closeAutoBackupModalBtn = $('closeAutoBackupModalBtn');
+    const closeAutoBackupBtn = $('closeAutoBackupBtn');
+    const saveAutoBackupBtn = $('saveAutoBackupBtn');
+    const autoBackupEnabled = $('autoBackupEnabled');
+    const backupInterval = $('backupInterval');
+    const exportExcelBtn = $('exportExcelBtn');
+    const searchInput = $('searchInput');
+    const filterSelect = $('filterSelect');
+    const historyBtn = $('historyBtn');
+    const historyModal = $('historyModal');
+    const closeHistoryModalBtn = $('closeHistoryModalBtn');
+    const historyContainer = $('historyContainer');
+    const clearHistoryBtn = $('clearHistoryBtn');
+    const profileModal = $('profileModal');
+    const profileBody = $('profileBody');
+    const closeProfileModalBtn = $('closeProfileModalBtn');
+    const annualReportBtn = $('annualReportBtn');
+    const annualReportModal = $('annualReportModal');
+    const closeAnnualModalBtn = $('closeAnnualModalBtn');
+    const annualReportBody = $('annualReportBody');
+    const printAnnualBtn = $('printAnnualBtn');
+    const annualCourse1Btn = $('annualCourse1Btn');
+    const annualCourse2Btn = $('annualCourse2Btn');
+    const annualCourseFinalBtn = $('annualCourseFinalBtn');
+
+    dateDisplay.textContent = new Date().toLocaleDateString('ckb');
+
+    function getCourseKey(page, course) { return page + '_' + course; }
+    function getGradeNumber(pageCode) {
+        if (!pageCode || pageCode.length < 2) return pageCode || '';
+        return pageCode.slice(0, -1);
+    }
+
+    function logChange(action, details, badge) {
+        if (!settings.history) settings.history = [];
+        settings.history.unshift({
+            time: new Date().toISOString(),
+            action: action,
+            details: details,
+            badge: badge || 'edit',
+            page: currentPage,
+            course: currentCourse
+        });
+        if (settings.history.length > 1000) settings.history = settings.history.slice(0, 1000);
+        saveAllData();
+    }
+
+    function loadAllData() {
+        const stored = safeStorage.getItem('gradeData_v28');
+        if (stored) { try { allData = JSON.parse(stored); } catch(e) { allData = {}; } }
+        else {
+            const old = safeStorage.getItem('gradeData_v27');
+            if (old) { try { allData = JSON.parse(old); } catch(e) { allData = {}; } }
+        }
+        const storedSettings = safeStorage.getItem('gradeSettings_v13');
+        if (storedSettings) {
+            try {
+                const ps = JSON.parse(storedSettings);
+                settings = { ...settings, ...ps };
+                if (Array.isArray(settings.hobaList)) hobaList = settings.hobaList;
+                if (!settings.password) settings.password = '9991';
+                if (!settings.autoBackup) settings.autoBackup = { enabled: false, interval: 3, lastBackup: null };
+                if (!Array.isArray(settings.history)) settings.history = [];
+            } catch(e) {}
+        }
+        schoolNameInput.value = settings.schoolName || 'باسرمەی نوێی بنەرەتی تێکەڵاو';
+        academicYearInput.value = settings.academicYear || '٢٠٢٦–٢٠٢٧';
+        for (let p of hobaList) {
+            for (let c of ['first', 'second']) {
+                const key = getCourseKey(p, c);
+                if (!Array.isArray(allData[key])) allData[key] = [];
+                allData[key] = allData[key].map(normalizeStudent);
+            }
+        }
+        saveAllData();
+    }
+    function saveAllData() {
+        safeStorage.setItem('gradeData_v28', JSON.stringify(allData));
+        settings.hobaList = hobaList;
+        safeStorage.setItem('gradeSettings_v13', JSON.stringify(settings));
+    }
+    function getCurrentStudents() {
+        const key = getCourseKey(currentPage, currentCourse);
+        if (!Array.isArray(allData[key])) { allData[key] = []; saveAllData(); }
+        return allData[key];
+    }
+    function setCurrentStudents(data) {
+        const key = getCourseKey(currentPage, currentCourse);
+        allData[key] = data.map(normalizeStudent);
+        saveAllData();
+    }
+    function getStudentsForCourse(page, course) {
+        const key = getCourseKey(page, course);
+        if (!Array.isArray(allData[key])) { allData[key] = []; saveAllData(); }
+        return allData[key];
+    }
+    function setStudentsForCourse(page, course, data) {
+        const key = getCourseKey(page, course);
+        allData[key] = data.map(normalizeStudent);
+        saveAllData();
+    }
+
+    function toNumber(val) {
+        if (val === null || val === undefined || val === '') return NaN;
+        return parseFloat(kurdishToEnglishNumbers(String(val)).trim());
+    }
+    function calculateSumOfFives(scores) {
+        if (!Array.isArray(scores)) return '';
+        let total = 0, hasValue = false;
+        for (let i = 0; i < scores.length; i += 2) {
+            const first = toNumber(scores[i]);
+            const second = toNumber(scores[i + 1]);
+            let pairValue = 0, pairHasValue = false;
+            if (!isNaN(first) && first >= 0) { pairValue += first; pairHasValue = true; }
+            if (!isNaN(second) && second >= 0) { pairValue += second; pairHasValue = true; }
+            if (pairHasValue) {
+                if (pairValue > 2) pairValue = 2;
+                total += pairValue;
+                hasValue = true;
+            }
+        }
+        return hasValue ? total : '';
+    }
+    function calculateMainTotal(scores, scores2, extraScores) {
+        const sum1 = calculateSumOfFives(scores);
+        const sum2 = calculateSumOfFives(scores2);
+        const val20 = toNumber(extraScores ? extraScores[0] : '');
+        const val60 = toNumber(extraScores ? extraScores[1] : '');
+        let total = 0, hasValue = false;
+        if (sum1 !== '') { total += sum1; hasValue = true; }
+        if (!isNaN(val20) && val20 >= 0) { total += val20; hasValue = true; }
+        if (sum2 !== '') { total += sum2; hasValue = true; }
+        if (!isNaN(val60) && val60 >= 0) { total += val60; hasValue = true; }
+        return hasValue ? total : '';
+    }
+    function calculateFinalScore(a, b) {
+        const v1 = parseFloat(a), v2 = parseFloat(b);
+        if (!isNaN(v1) && v1 >= 0 && !isNaN(v2) && v2 >= 0) return v1 + v2;
+        if (!isNaN(v1) && v1 >= 0) return v1;
+        if (!isNaN(v2) && v2 >= 0) return v2;
+        return '';
+    }
+    function displayNumber(num) {
+        if (num === '' || num === null || num === undefined) return '٠';
+        return englishToKurdishNumbers(String(num));
+    }
+    function getEvaluation(score) {
+        const n = parseFloat(score);
+        if (isNaN(n) || score === '') return { label: '—', cls: '' };
+        if (n >= 90) return { label: 'زۆر باش', cls: 'eval-excellent' };
+        if (n >= 80) return { label: 'باش', cls: 'eval-verygood' };
+        if (n >= 70) return { label: 'مامناوەند', cls: 'eval-good' };
+        if (n >= 50) return { label: 'قبووڵکراو', cls: 'eval-acceptable' };
+        return { label: 'لاواز', cls: 'eval-weak' };
+    }
+    function matchesFilter(s) {
+        if (!s) return false;
+        if (searchQuery) {
+            const n = (s.name || '').toLowerCase();
+            if (n.indexOf(searchQuery.toLowerCase()) === -1) return false;
+        }
+        if (filterType !== 'all') {
+            const total = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+            const num = parseFloat(total);
+            if (isNaN(num)) return false;
+            if (filterType === 'excellent' && num < 90) return false;
+            if (filterType === 'passed' && num < 50) return false;
+            if (filterType === 'failed' && num >= 50) return false;
+        }
+        return true;
+    }
+    function applyCourseTheme() {
+        document.body.classList.toggle('course-first', currentCourse === 'first');
+        document.body.classList.toggle('course-second', currentCourse === 'second');
+    }
+
+    function renderTable() {
+        applyCourseTheme();
+        const students = getCurrentStudents();
+        const items = [];
+        for (let i = 0; i < students.length; i++) if (matchesFilter(students[i])) items.push({ s: students[i], idx: i });
+        renderTableBodyItems(tbody, items, true);
+        updateSummary();
+        updateCourseColumns();
+    }
+
+    function renderTableBodyItems(targetTbody, items, showActions) {
+        targetTbody.innerHTML = '';
+        if (!items || items.length === 0) {
+            const cc = showActions ? 23 : 21;
+            targetTbody.innerHTML = '<tr><td colspan="' + cc + '" style="text-align:center;padding:20px;color:#6a8aaa;">' +
+                (searchQuery || filterType !== 'all' ? 'هیچ ئەنجامێک نەدۆزرایەوە' : 'هیچ قوتابیەک نییە') + '</td></tr>';
+            return;
+        }
+        for (let k = 0; k < items.length; k++) {
+            const s = items[k].s;
+            const i = items[k].idx;
+            const tr = document.createElement('tr');
+            tr.dataset.index = i;
+            const tdNum = document.createElement('td');
+            tdNum.className = 'row-num';
+            tdNum.textContent = englishToKurdishNumbers(String(k + 1));
+            tdNum.title = 'کلیک بۆ پڕۆفایل';
+            tdNum.addEventListener('click', function() { openProfile(i); });
+            tr.appendChild(tdNum);
+            const tdName = document.createElement('td');
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = s.name || '';
+            nameInput.placeholder = 'ناو...';
+            nameInput.className = 'name-input name-clickable';
+            nameInput.dataset.index = i;
+            nameInput.disabled = isLocked || !showActions;
+            tdName.appendChild(nameInput);
+            tr.appendChild(tdName);
+            for (let j = 0; j < SCORE_COLS; j++) {
+                const td = document.createElement('td');
+                const pair = document.createElement('div');
+                pair.className = 'score-pair';
+                const i1 = document.createElement('input');
+                i1.type = 'text'; i1.inputMode = 'numeric';
+                i1.value = (s.scores && s.scores[j*2] !== '' && s.scores[j*2] !== undefined) ? englishToKurdishNumbers(String(s.scores[j*2])) : '';
+                i1.placeholder = '٠'; i1.className = 'score-input number-input';
+                i1.dataset.index = i; i1.dataset.col = j*2; i1.dataset.pair = j; i1.maxLength = 1;
+                i1.disabled = isLocked || !showActions;
+                const sep = document.createElement('span'); sep.className = 'separator'; sep.textContent = '|';
+                const i2 = document.createElement('input');
+                i2.type = 'text'; i2.inputMode = 'numeric';
+                i2.value = (s.scores && s.scores[j*2+1] !== '' && s.scores[j*2+1] !== undefined) ? englishToKurdishNumbers(String(s.scores[j*2+1])) : '';
+                i2.placeholder = '٠'; i2.className = 'score-input number-input';
+                i2.dataset.index = i; i2.dataset.col = j*2+1; i2.dataset.pair = j; i2.maxLength = 1;
+                i2.disabled = isLocked || !showActions;
+                pair.appendChild(i1); pair.appendChild(sep); pair.appendChild(i2);
+                td.appendChild(pair);
+                tr.appendChild(td);
+            }
+            const tdSum1 = document.createElement('td');
+            tdSum1.className = 'total-display highlight';
+            tdSum1.textContent = '٠';
+            tdSum1.dataset.index = i; tdSum1.dataset.type = 'sum1';
+            tr.appendChild(tdSum1);
+            const tdE1 = document.createElement('td');
+            tdE1.className = 'mark-20-cell';
+            const eI1 = document.createElement('input');
+            eI1.type = 'text'; eI1.inputMode = 'numeric';
+            eI1.value = (s.extraScores && s.extraScores[0] !== '' && s.extraScores[0] !== undefined) ? englishToKurdishNumbers(String(s.extraScores[0])) : '';
+            eI1.placeholder = '٢٠'; eI1.className = 'extra-input number-input';
+            eI1.dataset.index = i; eI1.dataset.extra = '0'; eI1.maxLength = 2;
+            eI1.disabled = isLocked || !showActions;
+            tdE1.appendChild(eI1);
+            tr.appendChild(tdE1);
+            for (let j = 0; j < SCORE_COLS; j++) {
+                const td = document.createElement('td');
+                const pair = document.createElement('div');
+                pair.className = 'score-pair';
+                const i1 = document.createElement('input');
+                i1.type = 'text'; i1.inputMode = 'numeric';
+                i1.value = (s.scores2 && s.scores2[j*2] !== '' && s.scores2[j*2] !== undefined) ? englishToKurdishNumbers(String(s.scores2[j*2])) : '';
+                i1.placeholder = '٠'; i1.className = 'score-input-2 number-input';
+                i1.dataset.index = i; i1.dataset.col = j*2; i1.dataset.pair = j; i1.maxLength = 1;
+                i1.disabled = isLocked || !showActions;
+                const sep = document.createElement('span'); sep.className = 'separator'; sep.textContent = '|';
+                const i2 = document.createElement('input');
+                i2.type = 'text'; i2.inputMode = 'numeric';
+                i2.value = (s.scores2 && s.scores2[j*2+1] !== '' && s.scores2[j*2+1] !== undefined) ? englishToKurdishNumbers(String(s.scores2[j*2+1])) : '';
+                i2.placeholder = '٠'; i2.className = 'score-input-2 number-input';
+                i2.dataset.index = i; i2.dataset.col = j*2+1; i2.dataset.pair = j; i2.maxLength = 1;
+                i2.disabled = isLocked || !showActions;
+                pair.appendChild(i1); pair.appendChild(sep); pair.appendChild(i2);
+                td.appendChild(pair);
+                tr.appendChild(td);
+            }
+            const tdSum2 = document.createElement('td');
+            tdSum2.className = 'total-display highlight';
+            tdSum2.textContent = '٠';
+            tdSum2.dataset.index = i; tdSum2.dataset.type = 'sum2';
+            tr.appendChild(tdSum2);
+            const tdE2 = document.createElement('td');
+            tdE2.className = 'mark-60-cell';
+            const eI2 = document.createElement('input');
+            eI2.type = 'text'; eI2.inputMode = 'numeric';
+            eI2.value = (s.extraScores && s.extraScores[1] !== '' && s.extraScores[1] !== undefined) ? englishToKurdishNumbers(String(s.extraScores[1])) : '';
+            eI2.placeholder = '٦٠'; eI2.className = 'extra-input number-input';
+            eI2.dataset.index = i; eI2.dataset.extra = '1'; eI2.maxLength = 2;
+            eI2.disabled = isLocked || !showActions;
+            tdE2.appendChild(eI2);
+            tr.appendChild(tdE2);
+            const tdMain = document.createElement('td');
+            tdMain.className = 'total-display main';
+            tdMain.textContent = '٠';
+            tdMain.dataset.index = i; tdMain.dataset.type = 'main';
+            tr.appendChild(tdMain);
+            const tdFinal = document.createElement('td');
+            tdFinal.className = 'total-display final final-col';
+            tdFinal.textContent = '٠';
+            tdFinal.dataset.index = i; tdFinal.dataset.type = 'final';
+            tdFinal.style.display = 'none';
+            tr.appendChild(tdFinal);
+            const tdNote = document.createElement('td');
+            tdNote.className = 'note-cell';
+            const noteInput = document.createElement('input');
+            noteInput.type = 'text';
+            noteInput.value = s.note || '';
+            noteInput.placeholder = 'تێبینی...';
+            noteInput.className = 'note-input';
+            noteInput.dataset.index = i;
+            noteInput.disabled = isLocked || !showActions;
+            tdNote.appendChild(noteInput);
+            tr.appendChild(tdNote);
+            const tdEval = document.createElement('td');
+            tdEval.className = 'eval-cell';
+            const evalSpan = document.createElement('span');
+            evalSpan.className = 'eval-badge';
+            evalSpan.dataset.index = i;
+            evalSpan.dataset.type = 'eval';
+            evalSpan.textContent = '—';
+            tdEval.appendChild(evalSpan);
+            tr.appendChild(tdEval);
+            if (showActions) {
+                const tdAct = document.createElement('td');
+                const div = document.createElement('div');
+                div.className = 'row-actions';
+                const addB = document.createElement('button');
+                addB.className = 'btn-icon success'; addB.textContent = '➕';
+                addB.dataset.index = i; addB.disabled = isLocked;
+                const delB = document.createElement('button');
+                delB.className = 'btn-icon danger'; delB.textContent = '✕';
+                delB.dataset.index = i; delB.disabled = isLocked;
+                const profB = document.createElement('button');
+                profB.className = 'btn-icon'; profB.textContent = '👤'; profB.title = 'پڕۆفایل';
+                profB.dataset.index = i;
+                div.appendChild(addB); div.appendChild(delB); div.appendChild(profB);
+                tdAct.appendChild(div);
+                tr.appendChild(tdAct);
+            }
+            targetTbody.appendChild(tr);
+        }
+        updateAllTotals(targetTbody, items);
+    }
+
+    function updateAllTotals(targetTbody, items) {
+        const firstKey = getCourseKey(currentPage, 'first');
+        const firstStudents = allData[firstKey] || [];
+        const isSecond = currentCourse === 'second';
+        for (let k = 0; k < items.length; k++) {
+            const s = items[k].s;
+            const i = items[k].idx;
+            const sum1 = calculateSumOfFives(s.scores);
+            const td1 = targetTbody.querySelector('.total-display[data-index="' + i + '"][data-type="sum1"]');
+            if (td1) td1.textContent = sum1 !== '' ? displayNumber(sum1) : '٠';
+            const sum2 = calculateSumOfFives(s.scores2 || emptyScores());
+            const td2 = targetTbody.querySelector('.total-display[data-index="' + i + '"][data-type="sum2"]');
+            if (td2) td2.textContent = sum2 !== '' ? displayNumber(sum2) : '٠';
+            const mainTotal = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+            const tdMain = targetTbody.querySelector('.total-display[data-index="' + i + '"][data-type="main"]');
+            if (tdMain) tdMain.textContent = mainTotal !== '' ? displayNumber(mainTotal) : '٠';
+            const ev = getEvaluation(mainTotal);
+            const evEl = targetTbody.querySelector('.eval-badge[data-index="' + i + '"][data-type="eval"]');
+            if (evEl) { evEl.textContent = ev.label; evEl.className = 'eval-badge ' + ev.cls; }
+            if (isSecond) {
+                const firstS = firstStudents[i] || createEmptyStudent();
+                const firstMain = calculateMainTotal(firstS.scores, firstS.scores2 || emptyScores(), firstS.extraScores);
+                const finalScore = calculateFinalScore(firstMain, mainTotal);
+                const tdFinal = targetTbody.querySelector('.total-display[data-index="' + i + '"][data-type="final"]');
+                if (tdFinal) tdFinal.textContent = finalScore !== '' ? displayNumber(parseFloat(finalScore).toFixed(1)) : '٠';
+            }
+        }
+    }
+
+    function updateRowTotalsOnly(idx) {
+        const students = getCurrentStudents();
+        const s = students[idx];
+        if (!s) return;
+        const sum1 = calculateSumOfFives(s.scores);
+        const td1 = tbody.querySelector('.total-display[data-index="' + idx + '"][data-type="sum1"]');
+        if (td1) td1.textContent = sum1 !== '' ? displayNumber(sum1) : '٠';
+        const sum2 = calculateSumOfFives(s.scores2 || emptyScores());
+        const td2 = tbody.querySelector('.total-display[data-index="' + idx + '"][data-type="sum2"]');
+        if (td2) td2.textContent = sum2 !== '' ? displayNumber(sum2) : '٠';
+        const mainTotal = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+        const tdMain = tbody.querySelector('.total-display[data-index="' + idx + '"][data-type="main"]');
+        if (tdMain) tdMain.textContent = mainTotal !== '' ? displayNumber(mainTotal) : '٠';
+        const ev = getEvaluation(mainTotal);
+        const evEl = tbody.querySelector('.eval-badge[data-index="' + idx + '"][data-type="eval"]');
+        if (evEl) { evEl.textContent = ev.label; evEl.className = 'eval-badge ' + ev.cls; }
+        if (currentCourse === 'second') {
+            const firstKey = getCourseKey(currentPage, 'first');
+            const firstStudents = allData[firstKey] || [];
+            const firstS = firstStudents[idx] || createEmptyStudent();
+            const firstMain = calculateMainTotal(firstS.scores, firstS.scores2 || emptyScores(), firstS.extraScores);
+            const finalScore = calculateFinalScore(firstMain, mainTotal);
+            const tdFinal = tbody.querySelector('.total-display[data-index="' + idx + '"][data-type="final"]');
+            if (tdFinal) tdFinal.textContent = finalScore !== '' ? displayNumber(parseFloat(finalScore).toFixed(1)) : '٠';
+        }
+    }
+
+    function updateCourseColumns() {
+        const isFirst = currentCourse === 'first';
+        document.querySelectorAll('.final-col').forEach(el => { el.style.display = isFirst ? 'none' : ''; });
+        if (finalScoreHeader) finalScoreHeader.style.display = isFirst ? 'none' : '';
+        if (modalFinalHeader) modalFinalHeader.style.display = isFirst ? 'none' : '';
+        if (gradeDisplay) {
+            const ct = isFirst ? ' (کۆرسی یەکەم)' : ' (کۆرسی دووەم)';
+            gradeDisplay.textContent = englishToKurdishNumbers(getGradeNumber(currentPage)) + ct;
+        }
+    }
+
+    function updateSummary() {
+        const students = getCurrentStudents();
+        const valid = students.filter(s => s && s.name && s.name.trim() !== '');
+        currentStudentCount.textContent = englishToKurdishNumbers(String(students.length));
+        totalSpan.textContent = englishToKurdishNumbers(String(valid.length));
+        let scores = [];
+        for (let s of students) {
+            const mainTotal = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+            if (mainTotal !== '' && !isNaN(mainTotal)) scores.push(mainTotal);
+        }
+        if (scores.length === 0) avgSpan.textContent = '—';
+        else {
+            let sum = 0;
+            for (let v of scores) sum += v;
+            avgSpan.textContent = englishToKurdishNumbers((sum / scores.length).toFixed(1));
+        }
+    }
+
+    function openProfile(idx) {
+        const students = getCurrentStudents();
+        const s = students[idx];
+        if (!s) return;
+        const firstKey = getCourseKey(currentPage, 'first');
+        const firstStudents = allData[firstKey] || [];
+        const firstS = firstStudents[idx] || createEmptyStudent();
+        const firstMain = calculateMainTotal(firstS.scores, firstS.scores2 || emptyScores(), firstS.extraScores);
+        const secondMain = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+        const finalScore = calculateFinalScore(firstMain, secondMain);
+        const curMain = currentCourse === 'first' ? firstMain : secondMain;
+        const ev = getEvaluation(curMain);
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        const hobaLetter = currentPage.charAt(currentPage.length - 1);
+        const initial = (s.name || '؟').trim().charAt(0) || '؟';
+        let html = '';
+        html += '<div class="profile-header">';
+        html += '<div class="profile-avatar">' + initial + '</div>';
+        html += '<div class="profile-info">';
+        html += '<h3>' + (s.name || 'بێ ناو') + '</h3>';
+        html += '<p>پۆلی ' + englishToKurdishNumbers(getGradeNumber(currentPage)) + ' ھۆبەی ' + (sectionNames[hobaLetter] || hobaLetter) + '</p>';
+        html += '</div></div>';
+        html += '<div class="profile-stats">';
+        html += '<div class="profile-stat"><div class="num">' + (firstMain !== '' ? englishToKurdishNumbers(String(firstMain)) : '—') + '</div><div class="lbl">📘 کۆرسی یەکەم (١٠٠)</div></div>';
+        html += '<div class="profile-stat"><div class="num">' + (secondMain !== '' ? englishToKurdishNumbers(String(secondMain)) : '—') + '</div><div class="lbl">📗 کۆرسی دووەم (١٠٠)</div></div>';
+        html += '<div class="profile-stat"><div class="num">' + (finalScore !== '' ? englishToKurdishNumbers(parseFloat(finalScore).toFixed(1)) : '—') + '</div><div class="lbl">🏆 نمرەی کۆتایی (٢٠٠)</div></div>';
+        html += '<div class="profile-stat"><div class="num">' + ev.label + '</div><div class="lbl">🎯 ئاست</div></div>';
+        html += '</div>';
+        html += '<div class="profile-courses">';
+        html += '<div class="profile-course"><h5>📘 کۆرسی یەکەم</h5>';
+        html += '<div class="profile-row"><span class="lbl">کۆی ١ (١٠):</span><span class="val">' + (calculateSumOfFives(firstS.scores) !== '' ? englishToKurdishNumbers(String(calculateSumOfFives(firstS.scores))) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">نمرە (٢٠):</span><span class="val">' + (firstS.extraScores && firstS.extraScores[0] ? englishToKurdishNumbers(String(firstS.extraScores[0])) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">کۆی ٢ (١٠):</span><span class="val">' + (calculateSumOfFives(firstS.scores2) !== '' ? englishToKurdishNumbers(String(calculateSumOfFives(firstS.scores2))) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">نمرە (٦٠):</span><span class="val">' + (firstS.extraScores && firstS.extraScores[1] ? englishToKurdishNumbers(String(firstS.extraScores[1])) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">کۆی گشتی:</span><span class="val">' + (firstMain !== '' ? englishToKurdishNumbers(String(firstMain)) : '—') + '</span></div>';
+        html += '</div>';
+        html += '<div class="profile-course course2"><h5>📗 کۆرسی دووەم</h5>';
+        html += '<div class="profile-row"><span class="lbl">کۆی ١ (١٠):</span><span class="val">' + (calculateSumOfFives(s.scores) !== '' ? englishToKurdishNumbers(String(calculateSumOfFives(s.scores))) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">نمرە (٢٠):</span><span class="val">' + (s.extraScores && s.extraScores[0] ? englishToKurdishNumbers(String(s.extraScores[0])) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">کۆی ٢ (١٠):</span><span class="val">' + (calculateSumOfFives(s.scores2) !== '' ? englishToKurdishNumbers(String(calculateSumOfFives(s.scores2))) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">نمرە (٦٠):</span><span class="val">' + (s.extraScores && s.extraScores[1] ? englishToKurdishNumbers(String(s.extraScores[1])) : '—') + '</span></div>';
+        html += '<div class="profile-row"><span class="lbl">کۆی گشتی:</span><span class="val">' + (secondMain !== '' ? englishToKurdishNumbers(String(secondMain)) : '—') + '</span></div>';
+        html += '</div></div>';
+        html += '<div class="profile-section" style="margin-top:20px;"><h4>📝 تێبینی مامۆستا</h4>';
+        html += '<div class="note-display">' + (s.note ? s.note.replace(/</g, '&lt;') : 'هیچ تێبینییەک نییە') + '</div></div>';
+        profileBody.innerHTML = html;
+        profileModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeProfileModal() { profileModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+
+    function setupEventDelegation() {
+        let t = {};
+        tbody.addEventListener('input', function(e) {
+            if (isLocked) return;
+            const target = e.target;
+            if (target.classList.contains('name-input')) {
+                const idx = parseInt(target.dataset.index);
+                const students = getCurrentStudents();
+                if (students[idx]) {
+                    students[idx].name = target.value;
+                    setCurrentStudents(students);
+                    updateSummary();
+                    clearTimeout(t['name_' + idx]);
+                    t['name_' + idx] = setTimeout(() => logChange('گۆڕینی ناو', 'قوتابی #' + (idx + 1) + ': ' + target.value, 'edit'), 1500);
+                }
+                return;
+            }
+            if (target.classList.contains('note-input')) {
+                const idx = parseInt(target.dataset.index);
+                const students = getCurrentStudents();
+                if (students[idx]) {
+                    students[idx].note = target.value;
+                    setCurrentStudents(students);
+                    clearTimeout(t['note_' + idx]);
+                    t['note_' + idx] = setTimeout(() => logChange('گۆڕینی تێبینی', 'قوتابی #' + (idx + 1), 'edit'), 1500);
+                }
+                return;
+            }
+            if (target.classList.contains('score-input') || target.classList.contains('score-input-2')) {
+                const idx = parseInt(target.dataset.index);
+                const col = parseInt(target.dataset.col);
+                const pair = parseInt(target.dataset.pair);
+                const isSecond = target.classList.contains('score-input-2');
+                let val = kurdishToEnglishNumbers(target.value).replace(/[^0-9]/g, '');
+                if (val.length > 1) val = val.slice(-1);
+                if (val !== '' && val !== '0' && val !== '1') val = '';
+                const students = getCurrentStudents();
+                if (students[idx]) {
+                    const tk = isSecond ? 'scores2' : 'scores';
+                    if (!students[idx][tk]) students[idx][tk] = emptyScores();
+                    students[idx][tk][col] = val;
+                    const pf = parseInt(students[idx][tk][pair * 2]) || 0;
+                    const ps = parseInt(students[idx][tk][pair * 2 + 1]) || 0;
+                    if (pf + ps > 2) {
+                        students[idx][tk][col] = '';
+                        target.value = '';
+                        alert('کۆی هەر جووتە نابێت لە ٢ زیاتر بێت');
+                        return;
+                    }
+                    setCurrentStudents(students);
+                    target.value = englishToKurdishNumbers(val);
+                    updateRowTotalsOnly(idx);
+                    updateSummary();
+                    clearTimeout(t['s_' + idx]);
+                    t['s_' + idx] = setTimeout(() => logChange('گۆڕینی نمرە', 'قوتابی #' + (idx + 1), 'edit'), 2000);
+                }
+                return;
+            }
+            if (target.classList.contains('extra-input')) {
+                const idx = parseInt(target.dataset.index);
+                const extraIdx = parseInt(target.dataset.extra);
+                let val = kurdishToEnglishNumbers(target.value).replace(/[^0-9]/g, '');
+                if (val.length > 2) val = val.slice(0, 2);
+                let num = parseInt(val);
+                if (!isNaN(num)) {
+                    if (extraIdx === 0 && num > 20) num = 20;
+                    if (extraIdx === 1 && num > 60) num = 60;
+                    val = String(num);
+                }
+                const students = getCurrentStudents();
+                if (students[idx]) {
+                    if (!students[idx].extraScores) students[idx].extraScores = ['', '', '', ''];
+                    students[idx].extraScores[extraIdx] = val;
+                    setCurrentStudents(students);
+                    target.value = englishToKurdishNumbers(val);
+                    updateRowTotalsOnly(idx);
+                    updateSummary();
+                    clearTimeout(t['e_' + idx]);
+                    t['e_' + idx] = setTimeout(() => logChange('گۆڕینی نمرەی زیادە', 'قوتابی #' + (idx + 1), 'edit'), 2000);
+                }
+                return;
+            }
+        });
+        tbody.addEventListener('click', function(e) {
+            if (isLocked) return;
+            const target = e.target.closest('.btn-icon');
+            if (!target) return;
+            const idx = parseInt(target.dataset.index);
+            if (isNaN(idx)) return;
+            const students = getCurrentStudents();
+            if (target.classList.contains('success')) {
+                students.splice(idx + 1, 0, createEmptyStudent());
+                setCurrentStudents(students);
+                logChange('زیادکردنی قوتابی', 'دوای قوتابی #' + (idx + 1), 'add');
+                renderTable();
+                return;
+            }
+            if (target.classList.contains('danger')) {
+                const pwd = prompt('بۆ سڕینەوەی قوتابی، وشەی نهێنی بنووسە:');
+                if (pwd === null) return;
+                if (pwd !== settings.password) { alert('وشەی نهێنی هەڵەیە.'); return; }
+                if (students.length <= 1) { alert('پێویستە لانی کەم یەک ڕیز هەبێت.'); return; }
+                const nm = students[idx].name || ('#' + (idx + 1));
+                students.splice(idx, 1);
+                setCurrentStudents(students);
+                logChange('سڕینەوەی قوتابی', nm, 'del');
+                renderTable();
+                return;
+            }
+            if (target.textContent === '👤') { openProfile(idx); return; }
+        });
+    }
+
+    function addRowsAtEnd(count) {
+        if (isLocked) return;
+        count = Math.min(100, Math.max(0, parseInt(count) || 0));
+        if (count === 0) { alert('تکایە ژمارەیەکی دروست بنووسە'); return; }
+        const students = getCurrentStudents();
+        for (let i = 0; i < count; i++) students.push(createEmptyStudent());
+        setCurrentStudents(students);
+        logChange('زیادکردنی ڕیز', count + ' قوتابی زیادکرا', 'add');
+        renderTable();
+    }
+
+    function resetAll() {
+        if (isLocked) return;
+        const pwd = prompt('بۆ نوێکردنەوەی داتا، وشەی نهێنی بنووسە:');
+        if (pwd !== settings.password) { alert('وشەی نهێنی هەڵەیە.'); return; }
+        if (confirm('دڵنیایت لە سڕینەوەی هەموو داتاکان؟')) {
+            const count = Math.min(100, Math.max(0, parseInt(rowCountInput.value) || 0));
+            const students = [];
+            for (let i = 0; i < count; i++) students.push(createEmptyStudent());
+            setCurrentStudents(students);
+            logChange('نوێکردنەوەی داتا', 'داتای پۆل پاککرایەوە', 'system');
+            renderTable();
+        }
+    }
+
+    function exportToCSV() {
+        const students = getCurrentStudents();
+        if (students.length === 0) { alert('هیچ داتایەک نییە بۆ هەناردن'); return; }
+        const BOM = '\uFEFF';
+        const headers = ['#', 'ناوی قوتابی',
+            'ن١-جووت١', 'ن١-جووت٢', 'ن١-جووت٣', 'ن١-جووت٤', 'ن١-جووت٥', 'کۆی ١ (١٠)', 'نمرە (٢٠)',
+            'ن٢-جووت١', 'ن٢-جووت٢', 'ن٢-جووت٣', 'ن٢-جووت٤', 'ن٢-جووت٥', 'کۆی ٢ (١٠)', 'نمرە (٦٠)',
+            'کۆی گشتی (١٠٠)', 'تێبینی', 'ئاست'];
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        const hobaLetter = currentPage.charAt(currentPage.length - 1);
+        const meta = 'پۆلی ' + getGradeNumber(currentPage) + ' ھۆبەی ' + (sectionNames[hobaLetter] || hobaLetter) + ' - ' + (currentCourse === 'first' ? 'کۆرسی یەکەم' : 'کۆرسی دووەم');
+        let csv = BOM + '"' + meta + '"\n"' + (settings.schoolName || '') + ' - ' + (settings.academicYear || '') + '"\n\n';
+        csv += headers.map(h => '"' + h + '"').join(',') + '\n';
+        students.forEach((s, i) => {
+            const row = [];
+            row.push(i + 1);
+            row.push(s.name || '');
+            for (let j = 0; j < SCORE_COLS; j++) {
+                const a = s.scores[j*2]; const b = s.scores[j*2+1];
+                row.push(((a || '') + (b || '')) || '');
+            }
+            row.push(calculateSumOfFives(s.scores));
+            row.push(s.extraScores[0] || '');
+            for (let j = 0; j < SCORE_COLS; j++) {
+                const a = s.scores2[j*2]; const b = s.scores2[j*2+1];
+                row.push(((a || '') + (b || '')) || '');
+            }
+            row.push(calculateSumOfFives(s.scores2));
+            row.push(s.extraScores[1] || '');
+            const main = calculateMainTotal(s.scores, s.scores2, s.extraScores);
+            row.push(main);
+            row.push(s.note || '');
+            row.push(getEvaluation(main).label);
+            csv += row.map(v => '"' + String(v === undefined ? '' : v).replace(/"/g, '""') + '"').join(',') + '\n';
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const now = new Date();
+        a.download = 'نمرەکان_' + currentPage + '_' + currentCourse + '_' + now.toISOString().slice(0, 10) + '.csv';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        logChange('هەناردەکردن بۆ CSV', students.length + ' قوتابی', 'system');
+    }
+
+    function saveAsFile() {
+        const students = getCurrentStudents();
+        const data = { page: currentPage, course: currentCourse, schoolName: settings.schoolName, academicYear: settings.academicYear, students: students, date: new Date().toLocaleDateString('ckb') };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'نمرەکان_' + currentPage + '_' + currentCourse + '_' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        logChange('پاشەکەوتکردن', 'فایلی JSON', 'system');
+    }
+
+    function downloadBackup() {
+        const data = { format: 'tomari-v28', version: 28, schoolName: settings.schoolName, academicYear: settings.academicYear, hobaList: hobaList, allData: allData, history: settings.history, exportedAt: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const now = new Date();
+        const ds = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+        const ts = String(now.getHours()).padStart(2,'0') + '-' + String(now.getMinutes()).padStart(2,'0');
+        a.download = 'backup_نمرەکان_' + ds + '_' + ts + '.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        settings.autoBackup.lastBackup = now.toISOString();
+        saveAllData();
+        logChange('Backup دەستی', 'فایل دانرا', 'system');
+    }
+
+    function checkAutoBackup() {
+        if (!settings.autoBackup || !settings.autoBackup.enabled) return;
+        const now = new Date();
+        const last = settings.autoBackup.lastBackup ? new Date(settings.autoBackup.lastBackup) : null;
+        const days = parseInt(settings.autoBackup.interval) || 3;
+        let should = false;
+        if (!last) should = true;
+        else if ((now - last) / (1000*60*60*24) >= days) should = true;
+        if (should) {
+            setTimeout(() => {
+                const data = { format: 'tomari-v28', version: 28, schoolName: settings.schoolName, academicYear: settings.academicYear, hobaList: hobaList, allData: allData, history: settings.history, exportedAt: now.toISOString(), autoBackup: true };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const ds = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+                a.download = 'backup_نمرەکان_AUTO_' + ds + '.json';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                settings.autoBackup.lastBackup = now.toISOString();
+                saveAllData();
+            }, 1500);
+        }
+    }
+
+    function importBackup(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function() {
+            try {
+                const data = JSON.parse(reader.result);
+                if (data && data.allData) {
+                    if (Array.isArray(data.hobaList)) hobaList = data.hobaList;
+                    const imported = {};
+                    for (let p of hobaList) {
+                        for (let c of ['first', 'second']) {
+                            const k = p + '_' + c;
+                            imported[k] = Array.isArray(data.allData[k]) ? data.allData[k].map(normalizeStudent) : [];
+                        }
+                    }
+                    allData = imported;
+                    if (Array.isArray(data.history)) settings.history = data.history;
+                    settings.schoolName = data.schoolName || settings.schoolName;
+                    settings.academicYear = data.academicYear || settings.academicYear;
+                    schoolNameInput.value = settings.schoolName;
+                    academicYearInput.value = settings.academicYear;
+                    saveAllData();
+                    renderHobaButtons();
+                    renderTable();
+                    logChange('هێنانەوە لە Backup', hobaList.length + ' پۆل بارکرا', 'system');
+                    alert('✅ Backup بە سەرکەوتوویی هێنرایەوە.');
+                } else if (data && data.students && data.page) {
+                    const c2 = data.course || 'first';
+                    const p2 = data.page;
+                    if (hobaList.indexOf(p2) === -1) { hobaList.push(p2); renderHobaButtons(); }
+                    const k2 = p2 + '_' + c2;
+                    allData[k2] = data.students.map(normalizeStudent);
+                    if (data.schoolName) { settings.schoolName = data.schoolName; schoolNameInput.value = settings.schoolName; }
+                    if (data.academicYear) { settings.academicYear = data.academicYear; academicYearInput.value = settings.academicYear; }
+                    saveAllData();
+                    currentPage = p2; currentCourse = c2;
+                    document.querySelectorAll('.course-btn').forEach(b => b.classList.toggle('active', b.dataset.course === c2));
+                    renderHobaButtons();
+                    renderTable();
+                    logChange('هێنانەوە', 'پۆل ' + p2 + ' - ' + c2, 'system');
+                    alert('✅ داتا هێنرایەوە: ' + data.students.length + ' قوتابی');
+                } else throw new Error('bad');
+            } catch(e) { alert('❌ ئەم فایلە دروست نییە.'); }
+            importFileInput.value = '';
+        };
+        reader.readAsText(file);
+    }
+
+    function toggleLock() {
+        isLocked = !isLocked;
+        lockBtn.textContent = isLocked ? '🔒 نمرەکان قفل کراون' : '🔓 نمرەکان کراوەن';
+        lockBtn.classList.toggle('locked', isLocked);
+        lockStatusDisplay.textContent = isLocked ? 'قفل کراوە' : 'کراوە';
+        logChange(isLocked ? 'قفلکردنی نمرەکان' : 'کردنەوەی نمرەکان', '', 'lock');
+        renderTable();
+    }
+
+    function openScheduleModal() {
+        const students = getCurrentStudents();
+        const items = [];
+        for (let i = 0; i < students.length; i++) if (matchesFilter(students[i])) items.push({ s: students[i], idx: i });
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        const hl = currentPage.charAt(currentPage.length - 1);
+        const ct = currentCourse === 'first' ? 'کۆرسی یەکەم' : 'کۆرسی دووەم';
+        modalTitle.textContent = 'پۆلی ' + englishToKurdishNumbers(getGradeNumber(currentPage)) + ' ھۆبەی ' + (sectionNames[hl] || hl) + ' - ' + ct;
+        renderTableBodyItems(modalTbody, items, false);
+        scheduleModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeScheduleModal() { scheduleModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function switchPage(page) {
+        currentPage = page;
+        document.querySelectorAll('.page-btn').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+        renderTable();
+    }
+    function switchCourse(course) {
+        if (course === currentCourse) return;
+        currentCourse = course;
+        document.querySelectorAll('.course-btn').forEach(b => b.classList.toggle('active', b.dataset.course === course));
+        renderTable();
+    }
+    function renderHobaButtons() {
+        hobaButtonsContainer.innerHTML = '';
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        hobaList.forEach(page => {
+            const btn = document.createElement('button');
+            btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
+            btn.dataset.page = page;
+            const hl = page.charAt(page.length - 1);
+            btn.innerHTML = 'پۆلی ' + englishToKurdishNumbers(getGradeNumber(page)) + ' <span class="sub">ھۆبەی ' + (sectionNames[hl] || hl) + '</span>';
+            btn.addEventListener('click', function() { switchPage(this.dataset.page); });
+            hobaButtonsContainer.appendChild(btn);
+        });
+    }
+
+    function openHobaModal() { renderHobaList(); hobaModal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeHobaModal() { hobaModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function renderHobaList() {
+        hobaListEl.innerHTML = '';
+        hobaList.forEach((page, index) => {
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:#f5f8fc; border-radius:8px; margin-bottom:5px; gap:10px;';
+            const input = document.createElement('input');
+            input.type = 'text'; input.value = page; input.dataset.index = index;
+            input.style.cssText = 'flex:1; border:1px solid #d0dae8; border-radius:20px; padding:5px 12px;';
+            const delBtn = document.createElement('button');
+            delBtn.textContent = '✕';
+            delBtn.style.cssText = 'background:#b13e3e; color:white; border:none; padding:4px 12px; border-radius:20px; cursor:pointer; font-weight:700;';
+            delBtn.dataset.index = index;
+            delBtn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.index);
+                const pwd = prompt('بۆ سڕینەوەی هۆبە، وشەی نهێنی بنووسە:');
+                if (pwd === settings.password) {
+                    if (hobaList.length <= 1) { alert('ناتوانیت هەموو هۆبەکان بسڕیتەوە.'); return; }
+                    const removed = hobaList[idx];
+                    hobaList.splice(idx, 1);
+                    if (currentPage === removed) currentPage = hobaList[0];
+                    renderHobaList(); renderHobaButtons(); renderTable(); saveAllData();
+                    logChange('سڕینەوەی هۆبە', removed, 'del');
+                } else if (pwd !== null) alert('وشەی نهێنی هەڵەیە.');
+            });
+            div.appendChild(input); div.appendChild(delBtn);
+            hobaListEl.appendChild(div);
+        });
+    }
+    function addNewHoba() {
+        const name = newHobaName.value.trim();
+        if (!name) { alert('ناوی هۆبە بنووسە.'); return; }
+        if (hobaList.indexOf(name) !== -1) { alert('ئەم هۆبەیە پێشتر هەیە.'); return; }
+        hobaList.push(name);
+        for (let c of ['first', 'second']) if (!allData[name + '_' + c]) allData[name + '_' + c] = [];
+        newHobaName.value = '';
+        renderHobaList(); renderHobaButtons(); saveAllData();
+        logChange('زیادکردنی هۆبە', name, 'add');
+    }
+    function saveHobaChanges() {
+        const inputs = hobaListEl.querySelectorAll('input');
+        const newList = [];
+        inputs.forEach(i => { const v = i.value.trim(); if (v) newList.push(v); });
+        if (newList.length === 0) { alert('پێویستە لانی کەم یەک هۆبە هەبێت.'); return; }
+        const oldList = hobaList.slice();
+        const newData = {};
+        newList.forEach((np, idx) => {
+            const op = oldList[idx] || np;
+            for (let c of ['first', 'second']) newData[np + '_' + c] = allData[op + '_' + c] || [];
+        });
+        allData = newData; hobaList = newList;
+        if (hobaList.indexOf(currentPage) === -1) currentPage = hobaList[0];
+        saveAllData(); renderHobaButtons(); renderTable(); closeHobaModal();
+        logChange('گۆڕینی هۆبەکان', newList.length + ' هۆبە', 'edit');
+    }
+
+    function openPwdModal() { oldPwdInput.value = ''; newPwdInput.value = ''; confirmPwdInput.value = ''; pwdModal.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => oldPwdInput.focus(), 100); }
+    function closePwdModal() { pwdModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function savePwdChanges() {
+        if (oldPwdInput.value !== settings.password) { alert('وشەی نهێنی ئێستا هەڵەیە.'); return; }
+        const np = newPwdInput.value.trim();
+        if (!np) { alert('وشەی نهێنی نوێ بنووسە.'); return; }
+        if (np.length < 4) { alert('لانی کەم ٤ پیت.'); return; }
+        if (np !== confirmPwdInput.value.trim()) { alert('وەک یەک نین.'); return; }
+        settings.password = np;
+        saveAllData();
+        logChange('گۆڕینی وشەی نهێنی', '', 'system');
+        alert('✅ وشەی نهێنی گۆڕدرا.');
+        closePwdModal();
+    }
+
+    function openAutoBackupModal() {
+        autoBackupEnabled.checked = settings.autoBackup.enabled || false;
+        backupInterval.value = settings.autoBackup.interval || 3;
+        autoBackupModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAutoBackupModal() { autoBackupModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function saveAutoBackupSettings() {
+        settings.autoBackup.enabled = autoBackupEnabled.checked;
+        settings.autoBackup.interval = parseInt(backupInterval.value) || 3;
+        saveAllData();
+        alert('✅ ڕێکخستنەکان پاشەکەوت کران');
+        closeAutoBackupModal();
+    }
+
+    function openRankModal() { rankCourse = 'first'; renderRanking(); rankModal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeRankModal() { rankModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function getRankData(course) {
+        const key = getCourseKey(currentPage, course);
+        const students = allData[key] || [];
+        const result = [];
+        for (let i = 0; i < students.length; i++) {
+            const s = students[i];
+            if (!s || !s.name || s.name.trim() === '') continue;
+            let score;
+            if (course === 'first') score = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+            else {
+                const fk = getCourseKey(currentPage, 'first');
+                const fs = (allData[fk] || [])[i] || createEmptyStudent();
+                const fm = calculateMainTotal(fs.scores, fs.scores2 || emptyScores(), fs.extraScores);
+                const sm = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+                score = calculateFinalScore(fm, sm);
+            }
+            const ns = parseFloat(score);
+            result.push({ name: s.name, score: score !== '' ? ns : 0, displayScore: score !== '' ? (course === 'first' ? score : parseFloat(score).toFixed(1)) : 0 });
+        }
+        result.sort((a, b) => b.score - a.score);
+        return result;
+    }
+    function renderRanking() {
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        const hl = currentPage.charAt(currentPage.length - 1);
+        const ct = rankCourse === 'first' ? 'کۆرسی یەکەم' : rankCourse === 'second' ? 'کۆرسی دووەم' : 'نمرەی کۆتایی (٢٠٠)';
+        rankFirstCourseBtn.style.background = rankCourse === 'first' ? '#1a3a6a' : '';
+        rankFirstCourseBtn.style.color = rankCourse === 'first' ? 'white' : '';
+        rankSecondCourseBtn.style.background = rankCourse === 'second' ? '#1a7a4a' : '';
+        rankSecondCourseBtn.style.color = rankCourse === 'second' ? 'white' : '';
+        rankFinalBtn.style.background = rankCourse === 'final' ? '#c47a00' : '';
+        rankFinalBtn.style.color = rankCourse === 'final' ? 'white' : '';
+        rankModalTitle.textContent = 'پۆلی ' + englishToKurdishNumbers(getGradeNumber(currentPage)) + ' ھۆبەی ' + (sectionNames[hl] || hl) + ' - ' + ct;
+        let data;
+        if (rankCourse === 'final') {
+            const fk = getCourseKey(currentPage, 'first');
+            const sk = getCourseKey(currentPage, 'second');
+            const fs = allData[fk] || [];
+            const ss = allData[sk] || [];
+            data = [];
+            const m = Math.max(fs.length, ss.length);
+            for (let i = 0; i < m; i++) {
+                const f = fs[i] || createEmptyStudent();
+                const s = ss[i] || createEmptyStudent();
+                const n = s.name || f.name || '';
+                if (!n || !n.trim()) continue;
+                const fm = calculateMainTotal(f.scores, f.scores2 || emptyScores(), f.extraScores);
+                const sm = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+                const fin = calculateFinalScore(fm, sm);
+                const ns = parseFloat(fin);
+                data.push({ name: n, score: !isNaN(ns) ? ns : 0, displayScore: !isNaN(ns) ? ns.toFixed(1) : 0 });
+            }
+            data.sort((a, b) => b.score - a.score);
+        } else data = getRankData(rankCourse);
+        if (data.length === 0) { rankTableContainer.innerHTML = '<div style="text-align:center;padding:30px;color:#6a8aaa;">هیچ قوتابیەک نییە</div>'; return; }
+        const maxS = rankCourse === 'final' ? 200 : 100;
+        let html = '<table class="rank-table"><thead><tr><th style="width:60px;">ڕیز</th><th style="width:50px;">🏅</th><th>ناوی قوتابی</th><th style="width:120px;">نمرە</th><th style="width:200px;">ڕێژە</th></tr></thead><tbody>';
+        data.forEach((d, i) => {
+            let rc = '', md = '';
+            if (i === 0) { rc = 'rank-1'; md = '🥇'; } else if (i === 1) { rc = 'rank-2'; md = '🥈'; } else if (i === 2) { rc = 'rank-3'; md = '🥉'; }
+            const pct = Math.min(100, (d.score / maxS) * 100);
+            html += '<tr class="' + rc + '"><td><strong>' + englishToKurdishNumbers(String(i + 1)) + '</strong></td><td class="rank-medal">' + (md || '—') + '</td><td style="text-align:right; padding-right:15px;">' + (d.name || '') + '</td><td><span class="rank-score">' + englishToKurdishNumbers(String(d.displayScore)) + '</span></td><td><div class="rank-bar"><div class="rank-bar-fill" style="width:' + pct + '%"></div></div></td></tr>';
+        });
+        html += '</tbody></table>';
+        rankTableContainer.innerHTML = html;
+    }
+
+    function drawCharts(scores) {
+        const gc = document.getElementById('gradeChart');
+        if (gc) {
+            const ctx = gc.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = gc.parentElement.getBoundingClientRect();
+            const W = rect.width || 400;
+            const H = 250;
+            gc.width = W * dpr;
+            gc.height = H * dpr;
+            gc.style.width = W + 'px';
+            gc.style.height = H + 'px';
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, W, H);
+            const bands = [0, 0, 0, 0, 0];
+            scores.forEach(s => {
+                if (s >= 90) bands[0]++;
+                else if (s >= 80) bands[1]++;
+                else if (s >= 70) bands[2]++;
+                else if (s >= 50) bands[3]++;
+                else bands[4]++;
+            });
+            const labels = ['٩٠-١٠٠', '٨٠-٨٩', '٧٠-٧٩', '٥٠-٦٩', '٠-٤٩'];
+            const colors = ['#1a7a4a', '#4a9a6a', '#c4a000', '#e67e22', '#b13e3e'];
+            const padL = 40, padR = 20, padT = 20, padB = 40;
+            const chartW = W - padL - padR;
+            const chartH = H - padT - padB;
+            const maxVal = Math.max(1, ...bands);
+            ctx.strokeStyle = '#e8edf4';
+            ctx.lineWidth = 1;
+            ctx.font = '11px Segoe UI, Tahoma';
+            ctx.fillStyle = '#5a6e8a';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + chartH - (chartH * i / 4);
+                ctx.beginPath();
+                ctx.moveTo(padL, y);
+                ctx.lineTo(padL + chartW, y);
+                ctx.stroke();
+                const val = Math.round(maxVal * i / 4);
+                ctx.fillText(englishToKurdishNumbers(String(val)), padL - 6, y);
+            }
+            const gap = chartW / bands.length;
+            const barW = gap * 0.6;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            bands.forEach((v, i) => {
+                const x = padL + gap * i + (gap - barW) / 2;
+                const barH = (v / maxVal) * chartH;
+                const y = padT + chartH - barH;
+                const grd = ctx.createLinearGradient(0, y, 0, y + barH);
+                grd.addColorStop(0, colors[i]);
+                grd.addColorStop(1, colors[i] + 'cc');
+                ctx.fillStyle = grd;
+                ctx.beginPath();
+                const r = 6;
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + barW - r, y);
+                ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+                ctx.lineTo(x + barW, y + barH);
+                ctx.lineTo(x, y + barH);
+                ctx.lineTo(x, y + r);
+                ctx.quadraticCurveTo(x, y, x + r, y);
+                ctx.closePath();
+                ctx.fill();
+                if (v > 0) {
+                    ctx.fillStyle = '#1a2a4a';
+                    ctx.font = 'bold 12px Segoe UI, Tahoma';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText(englishToKurdishNumbers(String(v)), x + barW / 2, y - 4);
+                    ctx.textBaseline = 'top';
+                }
+                ctx.fillStyle = '#2a4a6a';
+                ctx.font = '11px Segoe UI, Tahoma';
+                ctx.fillText(labels[i], x + barW / 2, padT + chartH + 8);
+            });
+        }
+        const pc = document.getElementById('passChart');
+        if (pc) {
+            const ctx = pc.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = pc.parentElement.getBoundingClientRect();
+            const W = rect.width || 400;
+            const H = 250;
+            pc.width = W * dpr;
+            pc.height = H * dpr;
+            pc.style.width = W + 'px';
+            pc.style.height = H + 'px';
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, W, H);
+            const passed = scores.filter(s => s >= 50).length;
+            const failed = scores.length - passed;
+            const total = passed + failed;
+            if (total === 0) {
+                ctx.fillStyle = '#6a8aaa';
+                ctx.font = '14px Segoe UI, Tahoma';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('هیچ داتایەک نییە', W / 2, H / 2);
+                return;
+            }
+            const cx = W / 2 - 40;
+            const cy = H / 2;
+            const R = 75;
+            const innerR = 45;
+            let start = -Math.PI / 2;
+            const segments = [
+                { value: passed, color: '#1a7a4a', label: 'دەرچوو' },
+                { value: failed, color: '#b13e3e', label: 'دەرنەچوو' }
+            ];
+            segments.forEach(seg => {
+                if (seg.value === 0) return;
+                const angle = (seg.value / total) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.arc(cx, cy, R, start, start + angle);
+                ctx.arc(cx, cy, innerR, start + angle, start, true);
+                ctx.closePath();
+                ctx.fillStyle = seg.color;
+                ctx.fill();
+                const midA = start + angle / 2;
+                const lx = cx + Math.cos(midA) * (R + innerR) / 2;
+                const ly = cy + Math.sin(midA) * (R + innerR) / 2;
+                const pct = Math.round((seg.value / total) * 100);
+                if (pct >= 5) {
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 13px Segoe UI, Tahoma';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(englishToKurdishNumbers(String(pct)) + '%', lx, ly);
+                }
+                start += angle;
+            });
+            ctx.fillStyle = '#1a2a4a';
+            ctx.font = 'bold 20px Segoe UI, Tahoma';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(englishToKurdishNumbers(String(total)), cx, cy - 6);
+            ctx.font = '11px Segoe UI, Tahoma';
+            ctx.fillStyle = '#5a6e8a';
+            ctx.fillText('قوتابی', cx, cy + 14);
+            const legendX = cx + R + 30;
+            const legendY = cy - 30;
+            ctx.textAlign = 'left';
+            segments.forEach((seg, i) => {
+                const y = legendY + i * 26;
+                ctx.fillStyle = seg.color;
+                ctx.beginPath();
+                ctx.arc(legendX + 8, y, 7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#2a4a6a';
+                ctx.font = '13px Segoe UI, Tahoma';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(seg.label + ': ' + englishToKurdishNumbers(String(seg.value)), legendX + 22, y);
+            });
+        }
+    }
+
+    function openReportModal() {
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        const hl = currentPage.charAt(currentPage.length - 1);
+        const ct = currentCourse === 'first' ? 'کۆرسی یەکەم' : 'کۆرسی دووەم';
+        reportSchoolName.textContent = settings.schoolName || '';
+        reportYear.textContent = settings.academicYear || '';
+        reportClassInfo.textContent = 'پۆلی ' + englishToKurdishNumbers(getGradeNumber(currentPage)) + ' ھۆبەی ' + (sectionNames[hl] || hl) + ' - ' + ct;
+        reportDate.textContent = new Date().toLocaleDateString('ckb');
+        const students = getCurrentStudents();
+        const valid = students.filter(s => s && s.name && s.name.trim() !== '');
+        reportTotalStudents.textContent = englishToKurdishNumbers(String(valid.length));
+        let scores = [];
+        students.forEach(s => {
+            if (!s || !s.name || !s.name.trim()) return;
+            const m = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+            if (m !== '' && !isNaN(m)) scores.push(m);
+        });
+        reportTotalScores.textContent = englishToKurdishNumbers(String(scores.length));
+        if (scores.length === 0) {
+            reportHighest.textContent = '—'; reportAverage.textContent = '—'; reportLowest.textContent = '—'; reportPassed.textContent = '—';
+        } else {
+            const mx = Math.max.apply(null, scores);
+            const mn = Math.min.apply(null, scores);
+            let sum = 0; scores.forEach(v => sum += v);
+            const avg = sum / scores.length;
+            const passed = scores.filter(s => s >= 50).length;
+            reportHighest.textContent = englishToKurdishNumbers(String(mx));
+            reportAverage.textContent = englishToKurdishNumbers(avg.toFixed(1));
+            reportLowest.textContent = englishToKurdishNumbers(String(mn));
+            reportPassed.textContent = englishToKurdishNumbers(String(passed));
+        }
+        reportModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => drawCharts(scores), 200);
+        const rankData = getRankData(currentCourse);
+        if (rankData.length > 0) {
+            let html = '<h3 style="color:#1a3a6a; margin:20px 0 10px; text-align:center;">🏆 ڕیزبەندی قوتابیان</h3>';
+            html += '<table class="rank-table"><thead><tr><th style="width:60px;">ڕیز</th><th style="width:50px;">🏅</th><th>ناوی قوتابی</th><th style="width:120px;">نمرە</th></tr></thead><tbody>';
+            rankData.forEach((d, i) => {
+                const rc = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+                const md = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '—';
+                html += '<tr class="' + rc + '"><td><strong>' + englishToKurdishNumbers(String(i + 1)) + '</strong></td><td class="rank-medal">' + md + '</td><td style="text-align:right; padding-right:15px;">' + d.name + '</td><td><span class="rank-score">' + englishToKurdishNumbers(String(d.displayScore)) + '</span></td></tr>';
+            });
+            html += '</tbody></table>';
+            reportRankingContainer.innerHTML = html;
+        } else reportRankingContainer.innerHTML = '';
+    }
+    function closeReportModal() { reportModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+
+    function openHistoryModal() { renderHistory(); historyModal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeHistoryModal() { historyModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function renderHistory() {
+        const list = settings.history || [];
+        if (list.length === 0) {
+            historyContainer.innerHTML = '<div style="text-align:center;padding:30px;color:#6a8aaa;">هیچ تۆمارێک نییە</div>';
+            return;
+        }
+        let html = '<table class="history-table"><thead><tr><th style="width:140px;">کات</th><th style="width:150px;">کردار</th><th>وردەکاری</th><th style="width:120px;">پۆل</th><th style="width:100px;">کۆرس</th></tr></thead><tbody>';
+        list.forEach(h => {
+            const d = new Date(h.time);
+            const time = d.toLocaleDateString('ckb') + ' ' + d.toLocaleTimeString('ckb', {hour:'2-digit', minute:'2-digit'});
+            const badgeCls = 'badge-' + (h.badge || 'edit');
+            const courseText = h.course === 'first' ? 'کۆرسی یەکەم' : h.course === 'second' ? 'کۆرسی دووەم' : '';
+            html += '<tr>';
+            html += '<td class="history-time">' + time + '</td>';
+            html += '<td><span class="history-badge ' + badgeCls + '">' + (h.action || '') + '</span></td>';
+            html += '<td>' + (h.details || '—') + '</td>';
+            html += '<td>' + (h.page || '') + '</td>';
+            html += '<td>' + courseText + '</td>';
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        historyContainer.innerHTML = html;
+    }
+
+    function openAnnualReportModal() {
+        annualCourse = 'first';
+        renderAnnualReport();
+        annualReportModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAnnualReportModal() { annualReportModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    function renderAnnualReport() {
+        annualCourse1Btn.style.background = annualCourse === 'first' ? '#1a3a6a' : '';
+        annualCourse1Btn.style.color = annualCourse === 'first' ? 'white' : '';
+        annualCourse2Btn.style.background = annualCourse === 'second' ? '#1a7a4a' : '';
+        annualCourse2Btn.style.color = annualCourse === 'second' ? 'white' : '';
+        annualCourseFinalBtn.style.background = annualCourse === 'final' ? '#c47a00' : '';
+        annualCourseFinalBtn.style.color = annualCourse === 'final' ? 'white' : '';
+        const sectionNames = { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'ه', F: 'و' };
+        let totalStudents = 0, totalScores = 0, grandSum = 0, allScores = [];
+        const courseText = annualCourse === 'first' ? 'کۆرسی یەکەم' : annualCourse === 'second' ? 'کۆرسی دووەم' : 'نمرەی کۆتایی';
+        let html = '<div class="annual-summary">';
+        html += '<h3>📚 پوختەی گشتی - ' + courseText + '</h3>';
+        let cardsHtml = '<div class="annual-grid">';
+        hobaList.forEach(page => {
+            let students;
+            if (annualCourse === 'final') {
+                const fs = allData[page + '_first'] || [];
+                const ss = allData[page + '_second'] || [];
+                students = [];
+                const m = Math.max(fs.length, ss.length);
+                for (let i = 0; i < m; i++) {
+                    const f = fs[i] || createEmptyStudent();
+                    const s = ss[i] || createEmptyStudent();
+                    const nm = s.name || f.name || '';
+                    if (!nm.trim()) continue;
+                    const fm = calculateMainTotal(f.scores, f.scores2 || emptyScores(), f.extraScores);
+                    const sm = calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores);
+                    students.push({ name: nm, score: calculateFinalScore(fm, sm) });
+                }
+            } else {
+                const arr = allData[page + '_' + annualCourse] || [];
+                students = arr.filter(s => s && s.name && s.name.trim()).map(s => ({
+                    name: s.name,
+                    score: calculateMainTotal(s.scores, s.scores2 || emptyScores(), s.extraScores)
+                }));
+            }
+            const scoresArr = students.map(s => parseFloat(s.score)).filter(n => !isNaN(n));
+            const validCount = students.length;
+            totalStudents += validCount;
+            totalScores += scoresArr.length;
+            scoresArr.forEach(s => { allScores.push(s); grandSum += s; });
+            const maxS = annualCourse === 'final' ? 200 : 100;
+            let max = scoresArr.length ? Math.max.apply(null, scoresArr) : null;
+            let min = scoresArr.length ? Math.min.apply(null, scoresArr) : null;
+            let avg = scoresArr.length ? (scoresArr.reduce((a, b) => a + b, 0) / scoresArr.length) : null;
+            let passed = scoresArr.filter(s => s >= (maxS === 200 ? 100 : 50)).length;
+            const hl = page.charAt(page.length - 1);
+            cardsHtml += '<div class="annual-card">';
+            cardsHtml += '<h4>پۆلی ' + englishToKurdishNumbers(getGradeNumber(page)) + ' ھۆبەی ' + (sectionNames[hl] || hl) + '</h4>';
+            cardsHtml += '<div class="stat-row"><span class="lbl">👥 قوتابی:</span><span class="val">' + englishToKurdishNumbers(String(validCount)) + '</span></div>';
+            cardsHtml += '<div class="stat-row"><span class="lbl">📊 نمرە تۆمارکراو:</span><span class="val">' + englishToKurdishNumbers(String(scoresArr.length)) + '</span></div>';
+            cardsHtml += '<div class="stat-row"><span class="lbl">🏆 بەرزترین:</span><span class="val">' + (max !== null ? englishToKurdishNumbers(String(max)) : '—') + '</span></div>';
+            cardsHtml += '<div class="stat-row"><span class="lbl">📈 تێکڕا:</span><span class="val">' + (avg !== null ? englishToKurdishNumbers(avg.toFixed(1)) : '—') + '</span></div>';
+            cardsHtml += '<div class="stat-row"><span class="lbl">📉 کەمترین:</span><span class="val">' + (min !== null ? englishToKurdishNumbers(String(min)) : '—') + '</span></div>';
+            cardsHtml += '<div class="stat-row"><span class="lbl">✅ دەرچوو:</span><span class="val">' + englishToKurdishNumbers(String(passed)) + '</span></div>';
+            cardsHtml += '</div>';
+        });
+        cardsHtml += '</div>';
+        const grandAvg = allScores.length ? (grandSum / allScores.length) : 0;
+        html += '<div class="annual-summary-grid">';
+        html += '<div class="item"><div class="num">' + englishToKurdishNumbers(String(hobaList.length)) + '</div><div class="lbl">📚 کۆی پۆل</div></div>';
+        html += '<div class="item"><div class="num">' + englishToKurdishNumbers(String(totalStudents)) + '</div><div class="lbl">👥 کۆی قوتابی</div></div>';
+        html += '<div class="item"><div class="num">' + englishToKurdishNumbers(String(totalScores)) + '</div><div class="lbl">📊 نمرە تۆمارکراو</div></div>';
+        html += '<div class="item"><div class="num">' + (allScores.length ? englishToKurdishNumbers(grandAvg.toFixed(1)) : '—') + '</div><div class="lbl">📈 تێکڕای گشتی</div></div>';
+        html += '</div></div>';
+        html += cardsHtml;
+        annualReportBody.innerHTML = html;
+    }
+
+    function init() {
+        loadAllData();
+        renderHobaButtons();
+        renderTable();
+        setupEventDelegation();
+        courseBtns.forEach(b => b.addEventListener('click', function() { switchCourse(this.dataset.course); }));
+        copyNamesBtn.addEventListener('click', () => {
+            if (isLocked) { alert('نمرەکان قفل کراون.'); return; }
+            const fs = getStudentsForCourse(currentPage, 'first');
+            const ss = getStudentsForCourse(currentPage, 'second');
+            const ns = fs.map((st, i) => {
+                const ex = ss[i] || createEmptyStudent();
+                return { name: st.name || '', scores: ex.scores || emptyScores(), scores2: ex.scores2 || emptyScores(), extraScores: ex.extraScores || ['','','',''], note: ex.note || '' };
+            });
+            setStudentsForCourse(currentPage, 'second', ns);
+            logChange('کۆپی ناوەکان', fs.length + ' قوتابی', 'edit');
+            renderTable();
+            alert('✅ ناوەکان کۆپی کران.');
+        });
+        rankBtn.addEventListener('click', openRankModal);
+        reportBtn.addEventListener('click', openReportModal);
+        annualReportBtn.addEventListener('click', openAnnualReportModal);
+        historyBtn.addEventListener('click', openHistoryModal);
+        autoBackupBtn.addEventListener('click', openAutoBackupModal);
+        addRowsBtn.addEventListener('click', () => addRowsAtEnd(parseInt(rowCountInput.value) || 0));
+        schoolNameInput.addEventListener('input', function() { settings.schoolName = this.value; saveAllData(); });
+        academicYearInput.addEventListener('input', function() { settings.academicYear = this.value; saveAllData(); });
+        saveBtn.addEventListener('click', saveAsFile);
+        backupBtn.addEventListener('click', downloadBackup);
+        exportExcelBtn.addEventListener('click', exportToCSV);
+        importBtn.addEventListener('click', () => { importFileInput.value = ''; importFileInput.click(); });
+        importFileInput.addEventListener('change', function() { if (this.files && this.files[0]) importBackup(this.files[0]); });
+        printBtn.addEventListener('click', () => window.print());
+        printReportBtn.addEventListener('click', () => window.print());
+        printAnnualBtn.addEventListener('click', () => window.print());
+        resetBtn.addEventListener('click', resetAll);
+        lockBtn.addEventListener('click', toggleLock);
+        scheduleBtn.addEventListener('click', openScheduleModal);
+        closeModalBtn.addEventListener('click', closeScheduleModal);
+        scheduleModal.addEventListener('click', function(e) { if (e.target === this) closeScheduleModal(); });
+        closeRankModalBtn.addEventListener('click', closeRankModal);
+        rankModal.addEventListener('click', function(e) { if (e.target === this) closeRankModal(); });
+        rankFirstCourseBtn.addEventListener('click', () => { rankCourse = 'first'; renderRanking(); });
+        rankSecondCourseBtn.addEventListener('click', () => { rankCourse = 'second'; renderRanking(); });
+        rankFinalBtn.addEventListener('click', () => { rankCourse = 'final'; renderRanking(); });
+        closeReportModalBtn.addEventListener('click', closeReportModal);
+        closeReportBtn.addEventListener('click', closeReportModal);
+        reportModal.addEventListener('click', function(e) { if (e.target === this) closeReportModal(); });
+        closeAutoBackupModalBtn.addEventListener('click', closeAutoBackupModal);
+        closeAutoBackupBtn.addEventListener('click', closeAutoBackupModal);
+        saveAutoBackupBtn.addEventListener('click', saveAutoBackupSettings);
+        autoBackupModal.addEventListener('click', function(e) { if (e.target === this) closeAutoBackupModal(); });
+        closeProfileModalBtn.addEventListener('click', closeProfileModal);
+        profileModal.addEventListener('click', function(e) { if (e.target === this) closeProfileModal(); });
+        closeHistoryModalBtn.addEventListener('click', closeHistoryModal);
+        historyModal.addEventListener('click', function(e) { if (e.target === this) closeHistoryModal(); });
+        clearHistoryBtn.addEventListener('click', function() {
+            if (!confirm('دڵنیایت لە پاککردنەوەی هەموو مێژووەکە؟')) return;
+            settings.history = [];
+            saveAllData();
+            renderHistory();
+        });
+        closeAnnualModalBtn.addEventListener('click', closeAnnualReportModal);
+        annualReportModal.addEventListener('click', function(e) { if (e.target === this) closeAnnualReportModal(); });
+        annualCourse1Btn.addEventListener('click', () => { annualCourse = 'first'; renderAnnualReport(); });
+        annualCourse2Btn.addEventListener('click', () => { annualCourse = 'second'; renderAnnualReport(); });
+        annualCourseFinalBtn.addEventListener('click', () => { annualCourse = 'final'; renderAnnualReport(); });
+        searchInput.addEventListener('input', function() { searchQuery = this.value.trim(); renderTable(); });
+        filterSelect.addEventListener('change', function() { filterType = this.value; renderTable(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (scheduleModal.classList.contains('active')) closeScheduleModal();
+                if (hobaModal.classList.contains('active')) closeHobaModal();
+                if (pwdModal.classList.contains('active')) closePwdModal();
+                if (rankModal.classList.contains('active')) closeRankModal();
+                if (reportModal.classList.contains('active')) closeReportModal();
+                if (autoBackupModal.classList.contains('active')) closeAutoBackupModal();
+                if (profileModal.classList.contains('active')) closeProfileModal();
+                if (historyModal.classList.contains('active')) closeHistoryModal();
+                if (annualReportModal.classList.contains('active')) closeAnnualReportModal();
+            }
+        });
+        hobaEditBtn.addEventListener('click', openHobaModal);
+        closeHobaModalBtn.addEventListener('click', closeHobaModal);
+        closeHobaBtn.addEventListener('click', closeHobaModal);
+        addHobaBtn.addEventListener('click', addNewHoba);
+        newHobaName.addEventListener('keypress', function(e) { if (e.key === 'Enter') addNewHoba(); });
+        saveHobaBtn.addEventListener('click', saveHobaChanges);
+        hobaModal.addEventListener('click', function(e) { if (e.target === this) closeHobaModal(); });
+        pwdBtn.addEventListener('click', openPwdModal);
+        closePwdModalBtn.addEventListener('click', closePwdModal);
+        closePwdBtn.addEventListener('click', closePwdModal);
+        savePwdBtn.addEventListener('click', savePwdChanges);
+        pwdModal.addEventListener('click', function(e) { if (e.target === this) closePwdModal(); });
+        confirmPwdInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') savePwdChanges(); });
+        setTimeout(checkAutoBackup, 2000);
+    }
+
+    init();
+})();
+</script>
+</body>
+</html>
